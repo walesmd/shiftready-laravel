@@ -50,7 +50,9 @@ new #[Layout('layouts.auth')] class extends Component
 
     public function prevStep(): void
     {
-        $this->step--;
+        if ($this->step > 1) {
+            $this->step--;
+        }
     }
 
     public function register(): void
