@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Session;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
+new #[Layout('layouts.auth')] class extends Component
 {
     public LoginForm $form;
 
@@ -24,48 +24,91 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
+<x-slot:visual>
+    <x-auth.visual-side justify="space-between">
+        <div></div>
+
+        <div>
+            <blockquote class="testimonial-blockquote">
+                "ShiftReady changed how I make extra money. I just reply YES to a text, show up, and get paid the same day. It's that simple."
+            </blockquote>
+            <div class="testimonial-meta" style="margin-top:2rem;">
+                <p class="author-name">Marcus J.</p>
+                <p class="author-role">ShiftReady Worker, San Antonio</p>
+            </div>
+        </div>
+
+        <div class="auth-stats">
+            <div>
+                <span class="auth-stat-value">500+</span>
+                Active Workers
+            </div>
+            <div class="auth-stat-divider"></div>
+            <div>
+                <span class="auth-stat-value">50+</span>
+                Partner Employers
+            </div>
+            <div class="auth-stat-divider"></div>
+            <div>
+                <span class="auth-stat-value">$2M+</span>
+                Paid to Workers
+            </div>
+        </div>
+    </x-auth.visual-side>
+</x-slot:visual>
+
+<div class="auth-form-inner">
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form wire:submit="login">
-        <!-- Email Address -->
+    <x-auth.back-link />
+
+    <x-auth.logo />
+
+    <h1 class="auth-heading">Welcome back</h1>
+    <p class="auth-subheading">Sign in to your account to continue</p>
+
+    <form wire:submit="login" class="space-y-6" style="margin-top:2rem;">
+
+        <!-- Email -->
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="form.email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus autocomplete="username" />
+            <label class="form-label" for="login-email">Email</label>
+            <input
+                id="login-email"
+                type="email"
+                class="form-input"
+                placeholder="you@example.com"
+                wire:model="form.email"
+                required
+                autofocus
+                autocomplete="username"
+            />
             <x-input-error :messages="$errors->get('form.email')" class="mt-2" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
-
-            <x-text-input wire:model="form.password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
-
+        <div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.375rem;">
+                <label class="form-label" for="login-password" style="margin-bottom:0;">Password</label>
+                @if (Route::has('password.request'))
+                    <a class="forgot-link" href="{{ route('password.request') }}" wire:navigate>Forgot password?</a>
+                @endif
+            </div>
+            <x-auth.password-input
+                id="login-password"
+                wire:model="form.password"
+                required
+            />
             <x-input-error :messages="$errors->get('form.password')" class="mt-2" />
         </div>
 
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember" class="inline-flex items-center">
-                <input wire:model="form.remember" id="remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" name="remember">
-                <span class="ms-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500" href="{{ route('password.request') }}" wire:navigate>
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-w-full">Sign in</button>
     </form>
+
+    <p class="text-sm text-muted" style="text-align:center;margin-top:2rem;">
+        Don't have an account?
+        <a href="{{ route('register') }}" wire:navigate class="auth-footer-link">Sign up</a>
+    </p>
+
 </div>

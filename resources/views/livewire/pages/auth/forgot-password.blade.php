@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Password;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
-new #[Layout('layouts.guest')] class extends Component
+new #[Layout('layouts.auth')] class extends Component
 {
     public string $email = '';
 
@@ -17,9 +17,6 @@ new #[Layout('layouts.guest')] class extends Component
             'email' => ['required', 'string', 'email'],
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
         $status = Password::sendResetLink(
             $this->only('email')
         );
@@ -36,26 +33,76 @@ new #[Layout('layouts.guest')] class extends Component
     }
 }; ?>
 
-<div>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.') }}
-    </div>
+<x-slot:visual>
+    <x-auth.visual-side justify="space-between">
+        <div></div>
+
+        <div>
+            <blockquote class="testimonial-blockquote">
+                "ShiftReady changed how I make extra money. I just reply YES to a text, show up, and get paid the same day. It's that simple."
+            </blockquote>
+            <div class="testimonial-meta" style="margin-top:2rem;">
+                <p class="author-name">Marcus J.</p>
+                <p class="author-role">ShiftReady Worker, San Antonio</p>
+            </div>
+        </div>
+
+        <div class="auth-stats">
+            <div>
+                <span class="auth-stat-value">500+</span>
+                Active Workers
+            </div>
+            <div class="auth-stat-divider"></div>
+            <div>
+                <span class="auth-stat-value">50+</span>
+                Partner Employers
+            </div>
+            <div class="auth-stat-divider"></div>
+            <div>
+                <span class="auth-stat-value">$2M+</span>
+                Paid to Workers
+            </div>
+        </div>
+    </x-auth.visual-side>
+</x-slot:visual>
+
+<div class="auth-form-inner">
 
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
 
-    <form wire:submit="sendPasswordResetLink">
-        <!-- Email Address -->
+    <x-auth.back-link href="{{ route('login') }}" />
+
+    <x-auth.logo />
+
+    <h1 class="auth-heading">Forgot your password?</h1>
+    <p class="auth-subheading">No problem. Enter your email and we'll send you a reset link.</p>
+
+    <form wire:submit="sendPasswordResetLink" class="space-y-6" style="margin-top:2rem;">
         <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autofocus />
+            <label class="form-label" for="email">Email</label>
+            <input
+                id="email"
+                type="email"
+                class="form-input"
+                placeholder="you@example.com"
+                wire:model="email"
+                required
+                autofocus
+                autocomplete="email"
+            />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <x-primary-button>
-                {{ __('Email Password Reset Link') }}
-            </x-primary-button>
-        </div>
+        <button type="submit" class="btn btn-primary btn-lg btn-w-full" wire:loading.attr="disabled">
+            <span wire:loading.remove>Send reset link</span>
+            <span wire:loading>Sending...</span>
+        </button>
     </form>
+
+    <p class="text-sm text-muted" style="text-align:center;margin-top:2rem;">
+        Remember your password?
+        <a href="{{ route('login') }}" class="auth-footer-link" wire:navigate>Sign in</a>
+    </p>
+
 </div>

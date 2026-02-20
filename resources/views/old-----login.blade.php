@@ -19,17 +19,9 @@
     <div class="auth-form-side">
       <div class="auth-form-inner">
 
-        <a href="/" class="auth-back-link">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
-          Back to home
-        </a>
+        <x-auth.back-link />
 
-        <div class="auth-logo">
-          <div class="auth-logo-mark">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-          </div>
-          <span>ShiftReady</span>
-        </div>
+        <x-auth.logo />
 
         <h1 class="auth-heading">Welcome back</h1>
         <p class="auth-subheading">Sign in to your account to continue</p>
