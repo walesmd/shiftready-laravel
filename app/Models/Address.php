@@ -23,6 +23,8 @@ class Address extends Model
     protected function casts(): array
     {
         return [
+            'lat' => 'float',
+            'lng' => 'float',
             'geocoded_at' => 'datetime',
         ];
     }
