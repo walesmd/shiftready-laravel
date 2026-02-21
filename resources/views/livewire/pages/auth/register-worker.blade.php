@@ -1,9 +1,11 @@
 <?php
 
+use App\Data\ProfileOptions;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
@@ -42,6 +44,10 @@ new #[Layout('layouts.auth')] class extends Component
             ]),
             2 => $this->validate([
                 'zip' => ['required', 'string', 'max:10'],
+                'workTypes' => ['array'],
+                'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::workTypeValues())],
+                'availability' => ['array'],
+                'availability.*' => ['string', 'in:'.implode(',', ProfileOptions::availabilityValues())],
             ]),
             default => null,
         };
@@ -62,21 +68,29 @@ new #[Layout('layouts.auth')] class extends Component
             'agreeTerms' => ['accepted'],
             'agreeSms' => ['accepted'],
             'confirmAge' => ['accepted'],
+            'workTypes' => ['array'],
+            'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::workTypeValues())],
+            'availability' => ['array'],
+            'availability.*' => ['string', 'in:'.implode(',', ProfileOptions::availabilityValues())],
         ]);
 
-        $user = User::create([
-            'name' => trim($this->firstName . ' ' . $this->lastName),
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
-            'user_type' => UserType::Worker,
-        ]);
+        $user = DB::transaction(function (): User {
+            $user = User::create([
+                'name' => trim($this->firstName . ' ' . $this->lastName),
+                'email' => $this->email,
+                'password' => Hash::make($this->password),
+                'user_type' => UserType::Worker,
+            ]);
 
-        $user->workerProfile()->create([
-            'phone' => $this->phone,
-            'zip_code' => $this->zip,
-            'work_types' => $this->workTypes,
-            'availability' => $this->availability,
-        ]);
+            $user->workerProfile()->create([
+                'phone' => $this->phone,
+                'zip_code' => $this->zip,
+                'work_types' => $this->workTypes,
+                'availability' => $this->availability,
+            ]);
+
+            return $user;
+        });
 
         event(new Registered($user));
 
@@ -222,22 +236,18 @@ new #[Layout('layouts.auth')] class extends Component
             <div>
                 <label class="form-label">What type of work interests you?</label>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="moving" /><span>Moving &amp; lifting</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="warehouse" /><span>Warehouse work</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="driving" /><span>Driving</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="events" /><span>Event staffing</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="cleaning" /><span>Cleaning</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="labor" /><span>General labor</span></label>
+                    @foreach (ProfileOptions::INDUSTRIES_AND_WORK_TYPES as $opt)
+                        <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="{{ $opt['value'] }}" /><span>{{ $opt['label'] }}</span></label>
+                    @endforeach
                 </div>
             </div>
 
             <div>
                 <label class="form-label">When are you typically available?</label>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="weekday-mornings" /><span>Weekday mornings</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="weekday-afternoons" /><span>Weekday afternoons</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="weekday-evenings" /><span>Weekday evenings</span></label>
-                    <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="weekends" /><span>Weekends anytime</span></label>
+                    @foreach (ProfileOptions::AVAILABILITIES as $opt)
+                        <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="{{ $opt['value'] }}" /><span>{{ $opt['label'] }}</span></label>
+                    @endforeach
                 </div>
             </div>
 

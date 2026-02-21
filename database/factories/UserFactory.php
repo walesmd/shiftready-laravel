@@ -20,6 +20,20 @@ class UserFactory extends Factory
     protected static ?string $password;
 
     /**
+     * Configure the model factory.
+     */
+    public function configure(): static
+    {
+        return $this->afterCreating(function (\App\Models\User $user) {
+            match ($user->user_type) {
+                UserType::Worker => WorkerProfile::factory()->create(['user_id' => $user->id]),
+                UserType::Employer => EmployerProfile::factory()->create(['user_id' => $user->id]),
+                default => null,
+            };
+        });
+    }
+
+    /**
      * Define the model's default state.
      *
      * @return array<string, mixed>
@@ -49,10 +63,7 @@ class UserFactory extends Factory
      */
     public function worker(): static
     {
-        return $this->state(['user_type' => UserType::Worker])
-            ->afterCreating(function (\App\Models\User $user) {
-                WorkerProfile::factory()->create(['user_id' => $user->id]);
-            });
+        return $this->state(['user_type' => UserType::Worker]);
     }
 
     /**
@@ -60,9 +71,6 @@ class UserFactory extends Factory
      */
     public function employer(): static
     {
-        return $this->state(['user_type' => UserType::Employer])
-            ->afterCreating(function (\App\Models\User $user) {
-                EmployerProfile::factory()->create(['user_id' => $user->id]);
-            });
+        return $this->state(['user_type' => UserType::Employer]);
     }
 }

@@ -20,9 +20,10 @@ return new class extends Migration
             $table->string('industry');
             $table->string('address')->nullable();
             $table->string('city')->nullable();
-            $table->string('zip_code');
-            $table->string('worker_count');
-            $table->text('roles')->nullable();
+            $table->string('state')->nullable();
+            $table->string('zip_code')->nullable();
+            $table->unsignedInteger('worker_count')->nullable();
+            $table->json('roles')->nullable();
             $table->timestamps();
         });
     }

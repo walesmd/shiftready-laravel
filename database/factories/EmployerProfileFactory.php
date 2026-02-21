@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Data\ProfileOptions;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,11 +21,11 @@ class EmployerProfileFactory extends Factory
             'company_name' => fake()->company(),
             'title' => fake()->jobTitle(),
             'phone' => fake()->phoneNumber(),
-            'industry' => fake()->randomElement(['moving', 'warehouse', 'automotive', 'events', 'retail', 'manufacturing', 'other']),
+            'industry' => fake()->randomElement(ProfileOptions::industryValues()),
             'address' => fake()->streetAddress(),
             'city' => fake()->city(),
             'zip_code' => fake()->postcode(),
-            'worker_count' => fake()->randomElement(['1-5', '6-15', '16-30', '31-50', '50+']),
+            'worker_count' => fake()->randomElement(ProfileOptions::workerCountValues()),
             'roles' => fake()->sentence(),
         ];
     }

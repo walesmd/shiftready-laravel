@@ -65,6 +65,7 @@ class User extends Authenticatable
         return match ($this->user_type) {
             UserType::Worker => $this->workerProfile,
             UserType::Employer => $this->employerProfile,
+            default => null,
         };
     }
 }

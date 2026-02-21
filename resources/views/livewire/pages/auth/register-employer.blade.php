@@ -1,9 +1,11 @@
 <?php
 
+use App\Data\ProfileOptions;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Livewire\Attributes\Layout;
@@ -47,11 +49,11 @@ new #[Layout('layouts.auth')] class extends Component
                 'password' => ['required', 'string', Rules\Password::defaults()],
             ]),
             2 => $this->validate([
-                'industry' => ['required', 'string'],
+                'industry' => ['required', 'string', 'in:'.implode(',', ProfileOptions::industryValues())],
                 'address' => ['required', 'string', 'max:255'],
                 'city' => ['required', 'string', 'max:255'],
                 'zip' => ['required', 'string', 'max:10'],
-                'workerCount' => ['required', 'string'],
+                'workerCount' => ['required', 'string', 'in:'.implode(',', ProfileOptions::workerCountValues())],
             ]),
             default => null,
         };
@@ -69,30 +71,38 @@ new #[Layout('layouts.auth')] class extends Component
     public function register(): void
     {
         $this->validate([
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'string', Rules\Password::defaults()],
+        ]);
+        $this->validate([
             'agreeTerms' => ['accepted'],
             'agreeAuthorization' => ['accepted'],
         ]);
 
-        $user = User::create([
-            'name' => trim($this->firstName . ' ' . $this->lastName),
-            'email' => $this->email,
-            'password' => Hash::make($this->password),
-            'user_type' => UserType::Employer,
-        ]);
+        $user = DB::transaction(function () {
+            $user = User::create([
+                'name' => trim($this->firstName . ' ' . $this->lastName),
+                'email' => $this->email,
+                'password' => Hash::make($this->password),
+                'user_type' => UserType::Employer,
+            ]);
 
-        $user->employerProfile()->create([
-            'company_name' => $this->companyName,
-            'title' => $this->title,
-            'phone' => $this->phone,
-            'industry' => $this->industry,
-            'address' => $this->address,
-            'city' => $this->city,
-            'zip_code' => $this->zip,
-            'worker_count' => $this->workerCount,
-            'roles' => $this->roles,
-        ]);
+            $user->employerProfile()->create([
+                'company_name' => $this->companyName,
+                'title' => $this->title,
+                'phone' => $this->phone,
+                'industry' => $this->industry,
+                'address' => $this->address,
+                'city' => $this->city,
+                'zip_code' => $this->zip,
+                'worker_count' => $this->workerCount,
+                'roles' => $this->roles,
+            ]);
 
-        event(new Registered($user));
+            event(new Registered($user));
+
+            return $user;
+        });
 
         Auth::login($user);
 
@@ -248,13 +258,9 @@ new #[Layout('layouts.auth')] class extends Component
                 <label class="form-label" for="industry">Industry</label>
                 <select id="industry" class="form-select" wire:model="industry" required>
                     <option value="" disabled>Select your industry</option>
-                    <option value="moving">Moving &amp; Logistics</option>
-                    <option value="warehouse">Warehouse &amp; Distribution</option>
-                    <option value="automotive">Automotive</option>
-                    <option value="events">Events &amp; Hospitality</option>
-                    <option value="retail">Retail</option>
-                    <option value="manufacturing">Manufacturing</option>
-                    <option value="other">Other</option>
+                    @foreach (ProfileOptions::INDUSTRIES_AND_WORK_TYPES as $opt)
+                        <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
+                    @endforeach
                 </select>
                 <x-input-error :messages="$errors->get('industry')" class="mt-2" />
             </div>
@@ -282,11 +288,9 @@ new #[Layout('layouts.auth')] class extends Component
                 <label class="form-label" for="workerCount">How many workers do you typically need per week?</label>
                 <select id="workerCount" class="form-select" wire:model="workerCount" required>
                     <option value="" disabled>Select range</option>
-                    <option value="1-5">1-5 workers</option>
-                    <option value="6-15">6-15 workers</option>
-                    <option value="16-30">16-30 workers</option>
-                    <option value="31-50">31-50 workers</option>
-                    <option value="50+">50+ workers</option>
+                    @foreach (ProfileOptions::WORKER_COUNTS as $opt)
+                        <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
+                    @endforeach
                 </select>
                 <x-input-error :messages="$errors->get('workerCount')" class="mt-2" />
             </div>

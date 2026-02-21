@@ -63,10 +63,13 @@ test('new employers can register', function () {
 
     $this->assertAuthenticated();
 
-    $user = User::where('email', 'employer@example.com')->first();
+    $user = User::where('email', 'employer@example.com')->firstOrFail();
 
     expect($user->user_type)->toBe(UserType::Employer)
         ->and($user->employerProfile)->not->toBeNull()
         ->and($user->employerProfile->company_name)->toBe('Acme Corp')
+        ->and($user->employerProfile->industry)->toBe('moving')
+        ->and($user->employerProfile->address)->toBe('123 Main St')
+        ->and($user->employerProfile->city)->toBe('San Antonio')
         ->and($user->employerProfile->zip_code)->toBe('78201');
 });

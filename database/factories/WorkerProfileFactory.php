@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Data\ProfileOptions;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -19,8 +20,8 @@ class WorkerProfileFactory extends Factory
         return [
             'phone' => fake()->phoneNumber(),
             'zip_code' => fake()->postcode(),
-            'work_types' => fake()->randomElements(['moving', 'warehouse', 'driving', 'events', 'cleaning', 'labor'], 2),
-            'availability' => fake()->randomElements(['weekday-mornings', 'weekday-afternoons', 'weekday-evenings', 'weekends'], 2),
+            'work_types' => fake()->randomElements(ProfileOptions::workTypeValues(), 2),
+            'availability' => fake()->randomElements(ProfileOptions::availabilityValues(), 2),
         ];
     }
 }
