@@ -20,6 +20,7 @@ class EmployerProfile extends Model
         'industry',
         'address',
         'city',
+        'state',
         'zip_code',
         'worker_count',
         'roles',
