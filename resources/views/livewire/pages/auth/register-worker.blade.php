@@ -23,7 +23,8 @@ new #[Layout('layouts.auth')] class extends Component
     public string $password = '';
 
     // Step 2: Preferences
-    public string $zip = '';
+    public string $rawAddress = '';
+    public string $placeId = '';
     public array $workTypes = [];
     public array $availability = [];
 
@@ -43,7 +44,7 @@ new #[Layout('layouts.auth')] class extends Component
                 'password' => ['required', 'string', Rules\Password::defaults()],
             ]),
             2 => $this->validate([
-                'zip' => ['required', 'string', 'max:10'],
+                'rawAddress' => ['required', 'string', 'max:255'],
                 'workTypes' => ['array'],
                 'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::industriesAndWorkTypeValues())],
                 'availability' => ['array'],
@@ -82,12 +83,13 @@ new #[Layout('layouts.auth')] class extends Component
                 'user_type' => UserType::Worker,
             ]);
 
-            $user->workerProfile()->create([
+            $profile = $user->workerProfile()->create([
                 'phone' => $this->phone,
-                'zip_code' => $this->zip,
                 'work_types' => $this->workTypes,
                 'availability' => $this->availability,
             ]);
+
+            $profile->setAddress($this->rawAddress, $this->placeId ?: null);
 
             return $user;
         });
@@ -226,12 +228,7 @@ new #[Layout('layouts.auth')] class extends Component
     <!-- Step 2: Preferences -->
     @if ($step === 2)
         <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
-            <div>
-                <label class="form-label" for="zip">ZIP code</label>
-                <input id="zip" type="text" class="form-input" placeholder="78201" wire:model="zip" required autocomplete="postal-code" />
-                <p class="form-hint">We'll match you with jobs near you</p>
-                <x-input-error :messages="$errors->get('zip')" class="mt-2" />
-            </div>
+            <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Your address" />
 
             <div>
                 <label class="form-label">What type of work interests you?</label>

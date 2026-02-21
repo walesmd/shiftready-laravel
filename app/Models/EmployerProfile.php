@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAddress;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class EmployerProfile extends Model
 {
+    use HasAddress;
+
     /** @use HasFactory<\Database\Factories\EmployerProfileFactory> */
     use HasFactory;
 
@@ -18,10 +21,7 @@ class EmployerProfile extends Model
         'title',
         'phone',
         'industry',
-        'address',
-        'city',
-        'state',
-        'zip_code',
+        'address_id',
         'worker_count',
         'roles',
     ];

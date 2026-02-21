@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\HasAddress;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class WorkerProfile extends Model
 {
+    use HasAddress;
+
     /** @use HasFactory<\Database\Factories\WorkerProfileFactory> */
     use HasFactory;
 
@@ -15,7 +18,7 @@ class WorkerProfile extends Model
     protected $fillable = [
         'user_id',
         'phone',
-        'zip_code',
+        'address_id',
         'work_types',
         'availability',
     ];
