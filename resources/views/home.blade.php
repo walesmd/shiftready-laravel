@@ -491,14 +491,7 @@
         <div class="city-badge-inactive">Fort Worth — Coming Soon</div>
       </div>
 
-      <div class="waitlist-box">
-        <h3 style="font-weight:600;font-size:1rem;color:var(--foreground);">Not in our area yet?</h3>
-        <p class="text-sm text-muted" style="margin-top:0.5rem;">Join our waitlist and be the first to know when we launch in your city.</p>
-        <div class="waitlist-form">
-          <input type="email" placeholder="Enter your email" class="form-input" style="flex:1;" />
-          <button type="button" class="btn btn-primary">Notify Me</button>
-        </div>
-      </div>
+      <livewire:home.waitlist-form />
     </div>
   </section>
 
