@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('state')->nullable();
             $table->string('zip_code')->nullable();
-            $table->unsignedInteger('worker_count')->nullable();
-            $table->json('roles')->nullable();
+            $table->string('worker_count')->nullable();
+            $table->text('roles')->nullable();
             $table->timestamps();
         });
     }
