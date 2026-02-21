@@ -135,3 +135,13 @@ test('geocode returns null on no results', function () {
 
     expect($details)->toBeNull();
 });
+
+test('geocode returns null on non-OK HTTP response', function () {
+    Http::fake([
+        'maps.googleapis.com/maps/api/geocode/*' => Http::response([], 500),
+    ]);
+
+    $details = $this->service->geocode('123 Main St');
+
+    expect($details)->toBeNull();
+});

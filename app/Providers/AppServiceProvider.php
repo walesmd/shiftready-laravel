@@ -12,9 +12,15 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(GoogleMapsService::class, fn () => new GoogleMapsService(
-            apiKey: config('services.google_maps.key') ?? '',
-        ));
+        $this->app->singleton(GoogleMapsService::class, function () {
+            $apiKey = config('services.google_maps.key');
+
+            if (empty($apiKey)) {
+                throw new \RuntimeException('Google Maps API key is not configured.');
+            }
+
+            return new GoogleMapsService(apiKey: $apiKey);
+        });
     }
 
     /**

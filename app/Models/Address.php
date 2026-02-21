@@ -34,6 +34,6 @@ class Address extends Model
 
     public function displayAddress(): string
     {
-        return $this->formatted_address ?? $this->raw_address;
+        return $this->formatted_address ?? $this->raw_address ?? 'Unknown address';
     }
 }

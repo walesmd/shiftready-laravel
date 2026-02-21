@@ -22,13 +22,25 @@ class GoogleMapsService
      */
     public function autocomplete(string $input, string $sessionToken): array
     {
-        $response = Http::get(self::AUTOCOMPLETE_URL, [
+        $response = Http::timeout(15)->get(self::AUTOCOMPLETE_URL, [
             'input' => $input,
             'sessiontoken' => $sessionToken,
             'key' => $this->apiKey,
         ]);
 
+        if (! $response->ok()) {
+            Log::warning('Google Places Autocomplete HTTP error', ['status' => $response->status()]);
+
+            return [];
+        }
+
         $data = $response->json();
+
+        if (! is_array($data)) {
+            Log::warning('Google Places Autocomplete invalid JSON response');
+
+            return [];
+        }
 
         if (($data['status'] ?? '') !== 'OK') {
             if (($data['status'] ?? '') !== 'ZERO_RESULTS') {
@@ -79,6 +91,12 @@ class GoogleMapsService
             'address' => $rawAddress,
             'key' => $this->apiKey,
         ]);
+
+        if (! $response->ok()) {
+            Log::warning('Google Geocoding HTTP error', ['status' => $response->status()]);
+
+            return null;
+        }
 
         $data = $response->json();
 

@@ -26,7 +26,7 @@ trait HasAddress
                 ['raw_address' => $rawAddress],
             );
         } else {
-            $address = Address::create(['raw_address' => $rawAddress]);
+            $address = Address::firstOrCreate(['raw_address' => $rawAddress]);
         }
 
         $this->withoutEvents(fn () => $this->update(['address_id' => $address->id]));

@@ -229,6 +229,7 @@ new #[Layout('layouts.auth')] class extends Component
     @if ($step === 2)
         <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
             <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Your address" />
+            <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
 
             <div>
                 <label class="form-label">What type of work interests you?</label>

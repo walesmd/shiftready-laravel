@@ -262,6 +262,7 @@ new #[Layout('layouts.auth')] class extends Component
             </div>
 
             <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Business address" />
+            <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
 
             <div>
                 <label class="form-label" for="workerCount">How many workers do you typically need per week?</label>

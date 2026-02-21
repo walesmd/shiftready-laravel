@@ -17,6 +17,11 @@
         x-ref="input"
         type="text"
         class="form-input"
+        role="combobox"
+        aria-autocomplete="list"
+        aria-haspopup="listbox"
+        :aria-expanded="open"
+        aria-controls="address-dropdown-{{ $wireRawAddress }}"
         x-model="currentValue"
         @input="onInput($event)"
         @blur="onBlur()"
@@ -26,11 +31,13 @@
     <x-input-error :messages="$errors->get($wireRawAddress)" class="mt-2" />
 
     <ul
+        id="address-dropdown-{{ $wireRawAddress }}"
         x-ref="dropdown"
         x-show="open"
         x-cloak
         class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg"
         role="listbox"
+        aria-labelledby="address-input-{{ $wireRawAddress }}"
     >
         <template x-for="prediction in predictions" :key="prediction.place_id">
             <li>
