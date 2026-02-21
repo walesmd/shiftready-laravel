@@ -48,8 +48,12 @@ class ProfileOptions
         ['value' => 'weekends', 'label' => 'Weekends anytime'],
     ];
 
-    /** @return list<string> */
-    public static function industryValues(): array
+    /**
+     * Values from INDUSTRIES_AND_WORK_TYPES (single source for industry + work type options).
+     *
+     * @return list<string>
+     */
+    public static function industriesAndWorkTypeValues(): array
     {
         return array_column(self::INDUSTRIES_AND_WORK_TYPES, 'value');
     }
@@ -58,12 +62,6 @@ class ProfileOptions
     public static function workerCountValues(): array
     {
         return array_column(self::WORKER_COUNTS, 'value');
-    }
-
-    /** @return list<string> */
-    public static function workTypeValues(): array
-    {
-        return array_column(self::INDUSTRIES_AND_WORK_TYPES, 'value');
     }
 
     /** @return list<string> */

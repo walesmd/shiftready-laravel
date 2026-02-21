@@ -21,7 +21,7 @@ class EmployerProfileFactory extends Factory
             'company_name' => fake()->company(),
             'title' => fake()->jobTitle(),
             'phone' => fake()->phoneNumber(),
-            'industry' => fake()->randomElement(ProfileOptions::industryValues()),
+            'industry' => fake()->randomElement(ProfileOptions::industriesAndWorkTypeValues()),
             'address' => fake()->streetAddress(),
             'city' => fake()->city(),
             'zip_code' => fake()->postcode(),

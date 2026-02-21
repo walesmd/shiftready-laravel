@@ -20,7 +20,7 @@ class WorkerProfileFactory extends Factory
         return [
             'phone' => fake()->phoneNumber(),
             'zip_code' => fake()->postcode(),
-            'work_types' => fake()->randomElements(ProfileOptions::workTypeValues(), 2),
+            'work_types' => fake()->randomElements(ProfileOptions::industriesAndWorkTypeValues(), 2),
             'availability' => fake()->randomElements(ProfileOptions::availabilityValues(), 2),
         ];
     }

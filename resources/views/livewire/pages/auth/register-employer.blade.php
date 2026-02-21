@@ -49,7 +49,7 @@ new #[Layout('layouts.auth')] class extends Component
                 'password' => ['required', 'string', Rules\Password::defaults()],
             ]),
             2 => $this->validate([
-                'industry' => ['required', 'string', 'in:'.implode(',', ProfileOptions::industryValues())],
+                'industry' => ['required', 'string', 'in:'.implode(',', ProfileOptions::industriesAndWorkTypeValues())],
                 'address' => ['required', 'string', 'max:255'],
                 'city' => ['required', 'string', 'max:255'],
                 'zip' => ['required', 'string', 'max:10'],

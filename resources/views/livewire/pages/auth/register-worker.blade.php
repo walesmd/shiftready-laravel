@@ -45,7 +45,7 @@ new #[Layout('layouts.auth')] class extends Component
             2 => $this->validate([
                 'zip' => ['required', 'string', 'max:10'],
                 'workTypes' => ['array'],
-                'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::workTypeValues())],
+                'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::industriesAndWorkTypeValues())],
                 'availability' => ['array'],
                 'availability.*' => ['string', 'in:'.implode(',', ProfileOptions::availabilityValues())],
             ]),
@@ -69,7 +69,7 @@ new #[Layout('layouts.auth')] class extends Component
             'agreeSms' => ['accepted'],
             'confirmAge' => ['accepted'],
             'workTypes' => ['array'],
-            'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::workTypeValues())],
+            'workTypes.*' => ['string', 'in:'.implode(',', ProfileOptions::industriesAndWorkTypeValues())],
             'availability' => ['array'],
             'availability.*' => ['string', 'in:'.implode(',', ProfileOptions::availabilityValues())],
         ]);

@@ -32,7 +32,7 @@ test('new workers can register', function () {
 
     $this->assertAuthenticated();
 
-    $user = User::where('email', 'worker@example.com')->first();
+    $user = User::where('email', 'worker@example.com')->firstOrFail();
 
     expect($user->user_type)->toBe(UserType::Worker)
         ->and($user->workerProfile)->not->toBeNull()
