@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -72,11 +73,26 @@ new #[Layout('layouts.auth')] class extends Component
             'agreeAuthorization' => ['accepted'],
         ]);
 
-        event(new Registered($user = User::create([
+        $user = User::create([
             'name' => trim($this->firstName . ' ' . $this->lastName),
             'email' => $this->email,
             'password' => Hash::make($this->password),
-        ])));
+            'user_type' => UserType::Employer,
+        ]);
+
+        $user->employerProfile()->create([
+            'company_name' => $this->companyName,
+            'title' => $this->title,
+            'phone' => $this->phone,
+            'industry' => $this->industry,
+            'address' => $this->address,
+            'city' => $this->city,
+            'zip_code' => $this->zip,
+            'worker_count' => $this->workerCount,
+            'roles' => $this->roles,
+        ]);
+
+        event(new Registered($user));
 
         Auth::login($user);
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Auth;
@@ -63,11 +64,21 @@ new #[Layout('layouts.auth')] class extends Component
             'confirmAge' => ['accepted'],
         ]);
 
-        event(new Registered($user = User::create([
+        $user = User::create([
             'name' => trim($this->firstName . ' ' . $this->lastName),
             'email' => $this->email,
             'password' => Hash::make($this->password),
-        ])));
+            'user_type' => UserType::Worker,
+        ]);
+
+        $user->workerProfile()->create([
+            'phone' => $this->phone,
+            'zip_code' => $this->zip,
+            'work_types' => $this->workTypes,
+            'availability' => $this->availability,
+        ]);
+
+        event(new Registered($user));
 
         Auth::login($user);
 
