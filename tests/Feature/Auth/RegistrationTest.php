@@ -3,7 +3,9 @@
 namespace Tests\Feature\Auth;
 
 use App\Enums\UserType;
+use App\Jobs\GeocodeAddressJob;
 use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 use Livewire\Volt\Volt;
 
 test('worker registration screen can be rendered', function () {
@@ -15,6 +17,8 @@ test('employer registration screen can be rendered', function () {
 });
 
 test('new workers can register', function () {
+    Queue::fake();
+
     Volt::test('pages.auth.register-worker')
         ->set('firstName', 'Test')
         ->set('lastName', 'Worker')
@@ -22,7 +26,8 @@ test('new workers can register', function () {
         ->set('email', 'worker@example.com')
         ->set('password', 'password')
         ->call('nextStep')
-        ->set('zip', '78201')
+        ->set('rawAddress', '123 Main St, San Antonio, TX 78201')
+        ->set('placeId', 'test-place-id')
         ->call('nextStep')
         ->set('agreeTerms', true)
         ->set('agreeSms', true)
@@ -37,10 +42,16 @@ test('new workers can register', function () {
     expect($user->user_type)->toBe(UserType::Worker)
         ->and($user->workerProfile)->not->toBeNull()
         ->and($user->workerProfile->phone)->toBe('2105550123')
-        ->and($user->workerProfile->zip_code)->toBe('78201');
+        ->and($user->workerProfile->address_id)->not->toBeNull()
+        ->and($user->workerProfile->address->raw_address)->toBe('123 Main St, San Antonio, TX 78201')
+        ->and($user->workerProfile->address->place_id)->toBe('test-place-id');
+
+    Queue::assertPushed(GeocodeAddressJob::class);
 });
 
 test('new employers can register', function () {
+    Queue::fake();
+
     Volt::test('pages.auth.register-employer')
         ->set('companyName', 'Acme Corp')
         ->set('firstName', 'Test')
@@ -51,9 +62,8 @@ test('new employers can register', function () {
         ->set('password', 'password')
         ->call('nextStep')
         ->set('industry', 'moving')
-        ->set('address', '123 Main St')
-        ->set('city', 'San Antonio')
-        ->set('zip', '78201')
+        ->set('rawAddress', '456 Oak Ave, San Antonio, TX 78205')
+        ->set('placeId', 'employer-place-id')
         ->set('workerCount', '1-5')
         ->call('nextStep')
         ->set('agreeTerms', true)
@@ -69,7 +79,9 @@ test('new employers can register', function () {
         ->and($user->employerProfile)->not->toBeNull()
         ->and($user->employerProfile->company_name)->toBe('Acme Corp')
         ->and($user->employerProfile->industry)->toBe('moving')
-        ->and($user->employerProfile->address)->toBe('123 Main St')
-        ->and($user->employerProfile->city)->toBe('San Antonio')
-        ->and($user->employerProfile->zip_code)->toBe('78201');
+        ->and($user->employerProfile->address_id)->not->toBeNull()
+        ->and($user->employerProfile->address->raw_address)->toBe('456 Oak Ave, San Antonio, TX 78205')
+        ->and($user->employerProfile->address->place_id)->toBe('employer-place-id');
+
+    Queue::assertPushed(GeocodeAddressJob::class);
 });

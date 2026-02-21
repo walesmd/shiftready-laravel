@@ -26,9 +26,8 @@ new #[Layout('layouts.auth')] class extends Component
 
     // Step 2: Business Details
     public string $industry = '';
-    public string $address = '';
-    public string $city = '';
-    public string $zip = '';
+    public string $rawAddress = '';
+    public string $placeId = '';
     public string $workerCount = '';
     public string $roles = '';
 
@@ -50,9 +49,7 @@ new #[Layout('layouts.auth')] class extends Component
             ]),
             2 => $this->validate([
                 'industry' => ['required', 'string', 'in:'.implode(',', ProfileOptions::industriesAndWorkTypeValues())],
-                'address' => ['required', 'string', 'max:255'],
-                'city' => ['required', 'string', 'max:255'],
-                'zip' => ['required', 'string', 'max:10'],
+                'rawAddress' => ['required', 'string', 'max:255'],
                 'workerCount' => ['required', 'string', 'in:'.implode(',', ProfileOptions::workerCountValues())],
             ]),
             default => null,
@@ -87,17 +84,16 @@ new #[Layout('layouts.auth')] class extends Component
                 'user_type' => UserType::Employer,
             ]);
 
-            $user->employerProfile()->create([
+            $profile = $user->employerProfile()->create([
                 'company_name' => $this->companyName,
                 'title' => $this->title,
                 'phone' => $this->phone,
                 'industry' => $this->industry,
-                'address' => $this->address,
-                'city' => $this->city,
-                'zip_code' => $this->zip,
                 'worker_count' => $this->workerCount,
                 'roles' => $this->roles,
             ]);
+
+            $profile->setAddress($this->rawAddress, $this->placeId ?: null);
 
             event(new Registered($user));
 
@@ -265,24 +261,8 @@ new #[Layout('layouts.auth')] class extends Component
                 <x-input-error :messages="$errors->get('industry')" class="mt-2" />
             </div>
 
-            <div>
-                <label class="form-label" for="address">Business address</label>
-                <input id="address" type="text" class="form-input" placeholder="123 Main Street" wire:model="address" required autocomplete="street-address" />
-                <x-input-error :messages="$errors->get('address')" class="mt-2" />
-            </div>
-
-            <div class="form-row form-row-2">
-                <div>
-                    <label class="form-label" for="city">City</label>
-                    <input id="city" type="text" class="form-input" placeholder="San Antonio" wire:model="city" required autocomplete="address-level2" />
-                    <x-input-error :messages="$errors->get('city')" class="mt-2" />
-                </div>
-                <div>
-                    <label class="form-label" for="bizZip">ZIP code</label>
-                    <input id="bizZip" type="text" class="form-input" placeholder="78201" wire:model="zip" required autocomplete="postal-code" />
-                    <x-input-error :messages="$errors->get('zip')" class="mt-2" />
-                </div>
-            </div>
+            <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Business address" />
+            <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
 
             <div>
                 <label class="form-label" for="workerCount">How many workers do you typically need per week?</label>

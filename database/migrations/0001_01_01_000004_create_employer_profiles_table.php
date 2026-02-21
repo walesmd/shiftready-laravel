@@ -18,10 +18,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('phone');
             $table->string('industry');
-            $table->string('address')->nullable();
-            $table->string('city')->nullable();
-            $table->string('state')->nullable();
-            $table->string('zip_code')->nullable();
+            $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
             $table->string('worker_count')->nullable();
             $table->text('roles')->nullable();
             $table->timestamps();

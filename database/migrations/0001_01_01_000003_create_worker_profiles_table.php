@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->unique()->constrained()->cascadeOnDelete();
             $table->string('phone');
-            $table->string('zip_code');
+            $table->foreignId('address_id')->nullable()->constrained()->nullOnDelete();
             $table->json('work_types');
             $table->json('availability');
             $table->timestamps();
