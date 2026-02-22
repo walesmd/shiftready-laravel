@@ -32,7 +32,7 @@ Route::middleware('auth')->group(function () {
         Session::invalidate();
         Session::regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('home');
     })->name('logout');
 
     Volt::route('verify-email', 'pages.auth.verify-email')

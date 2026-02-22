@@ -20,10 +20,12 @@
 <body>
 
     @php
-        $isEmployer = auth()->user()->user_type === \App\Enums\UserType::Employer;
+        $user = auth()->user();
+        abort_unless($user, 403);
+        $isEmployer = $user->user_type === \App\Enums\UserType::Employer;
         $displayName = $isEmployer
-            ? (auth()->user()->employerProfile->company_name ?? auth()->user()->name)
-            : auth()->user()->name;
+            ? ($user->employerProfile->company_name ?? $user->name)
+            : $user->name;
         $initials = collect(explode(' ', $displayName))
             ->map(fn (string $word) => strtoupper(substr($word, 0, 1)))
             ->take(2)
@@ -53,27 +55,27 @@
                     </a>
                 </div>
 
-                <div style="display:flex;align-items:center;gap:0.75rem;">
+                <div class="flex items-center gap-3">
                     <div class="dropdown-wrapper bell-btn">
-                        <button type="button" class="btn btn-ghost btn-icon" style="position:relative;" aria-label="Notifications">
+                        <button type="button" class="btn btn-ghost btn-icon relative" aria-label="Notifications">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
                             <span class="bell-dot"></span>
                         </button>
                     </div>
 
                     <div class="dropdown-wrapper">
-                        <button type="button" class="user-menu-trigger" data-dropdown-trigger="user-dropdown">
-                            <div style="width:2rem;height:2rem;background-color:var(--muted);border-radius:9999px;display:flex;align-items:center;justify-content:center;">
-                                <span style="font-size:0.875rem;font-weight:500;">{{ $initials }}</span>
+                        <button type="button" class="user-menu-trigger flex items-center gap-2" data-dropdown-trigger="user-dropdown">
+                            <div class="w-8 h-8 rounded-full flex items-center justify-center bg-[var(--muted)]">
+                                <span class="text-sm font-medium">{{ $initials }}</span>
                             </div>
-                            <div style="display:none;text-align:left;" class="sm:block">
-                                <p style="font-size:0.875rem;font-weight:500;line-height:1.25;">{{ $displayName }}</p>
-                                <p style="font-size:0.75rem;color:var(--muted-foreground);line-height:1;">{{ $isEmployer ? 'Admin' : 'Worker' }}</p>
+                            <div class="hidden sm:block text-left">
+                                <p class="text-sm font-medium leading-tight">{{ $displayName }}</p>
+                                <p class="text-xs leading-none text-[var(--muted-foreground)]">{{ $isEmployer ? 'Admin' : 'Worker' }}</p>
                             </div>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--muted-foreground);"><path d="m6 9 6 6 6-6"/></svg>
+                            <svg class="text-[var(--muted-foreground)] shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                         </button>
 
-                        <div id="user-dropdown" class="dropdown-menu" style="min-width:14rem;">
+                        <div id="user-dropdown" class="dropdown-menu min-w-56">
                             <a href="{{ route('profile') }}" class="dropdown-item">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
                                 Account Settings
