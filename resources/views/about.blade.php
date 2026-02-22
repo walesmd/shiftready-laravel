@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>About Us — ShiftReady</title>
-  <meta name="description" content="Veteran-owned and San Antonio-built. Learn about ShiftReady, our founder Michael Wales, and why we started this company." />
+  <title>About Us — {{ config('app.name') }}</title>
+  <meta name="description" content="Veteran-owned and San Antonio-built. Learn about {{ config('app.name') }}, our founder Michael Wales, and why we started this company." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -18,9 +18,8 @@
   <header class="site-header">
     <div class="site-header-inner">
 
-      <a href="{{ route('home') }}" class="logo-link">
-        <div class="logo-mark"><span>SR</span></div>
-        <span class="logo-text">ShiftReady</span>
+      <a href="/" class="logo-link">
+        <x-logo />
       </a>
 
       <nav class="main-nav">
@@ -66,10 +65,10 @@
   ============================================================ -->
   <section class="cta-section">
     <div style="max-width:56rem;margin:0 auto;">
-      <p class="section-eyebrow" style="color:rgba(255,255,255,0.7);margin-bottom:1rem;">About ShiftReady</p>
+      <p class="section-eyebrow" style="color:rgba(255,255,255,0.7);margin-bottom:1rem;">About {{ config('app.name') }}</p>
       <h1 style="font-size:clamp(2rem,5vw,3.5rem);font-weight:700;margin-bottom:1.5rem;line-height:1.15;">Veteran-Owned. San Antonio-Built.</h1>
       <p style="font-size:1.125rem;line-height:1.75;max-width:42rem;opacity:0.85;">
-        We're not just another staffing company. We're operators who've run staffing businesses, built and sold startups, and served our country. We built ShiftReady because we know this industry can do better.
+        We're not just another staffing company. We're operators who've run staffing businesses, built and sold startups, and served our country. We built {{ config('app.name') }} because we know this industry can do better.
       </p>
     </div>
   </section>
@@ -85,7 +84,7 @@
           <p class="section-eyebrow">Why We Built This</p>
           <h2 class="section-heading">Staffing was broken. We had the receipts.</h2>
           <p class="section-subheading">
-            ShiftReady was founded by people who spent years inside staffing operations — not as consultants observing from the outside, but as operators dealing with the same clunky tools, slow processes, and disconnected workers every single day.
+            {{ config('app.name') }} was founded by people who spent years inside staffing operations — not as consultants observing from the outside, but as operators dealing with the same clunky tools, slow processes, and disconnected workers every single day.
           </p>
           <p class="text-muted" style="margin-top:1rem;line-height:1.75;">
             We knew there was a better way. Employers deserve to fill a shift without jumping through hoops. Workers deserve to get paid the same day they work. We stripped away everything that didn't serve those two goals and built something that actually works.
@@ -168,13 +167,13 @@
             Michael served in the US Air Force and went on to build a career spanning government technology, education tech, and engineering leadership. He's not just a startup founder — he's someone who's done the hard work across multiple industries and brought those lessons with him.
           </p>
           <p class="text-muted" style="line-height:1.75;">
-            Before ShiftReady, Michael successfully built and exited startups — meaning he knows what it takes to get from zero to something real. That scrappy, mission-focused mentality is baked into everything ShiftReady does.
+            Before {{ config('app.name') }}, Michael successfully built and exited startups — meaning he knows what it takes to get from zero to something real. That scrappy, mission-focused mentality is baked into everything {{ config('app.name') }} does.
           </p>
           <p class="text-muted" style="line-height:1.75;">
             He also ran staffing operations firsthand. He watched how clunky, impersonal, and slow the industry was for everyone involved — employers waiting days for workers, workers waiting weeks to get paid. That experience wasn't just frustrating; it was clarifying.
           </p>
           <p class="text-muted" style="line-height:1.75;">
-            ShiftReady is the company Michael wishes had existed when he needed it — combining real operational experience with modern technology to make on-demand staffing actually work.
+            {{ config('app.name') }} is the company Michael wishes had existed when he needed it — combining real operational experience with modern technology to make on-demand staffing actually work.
           </p>
         </div>
 
@@ -248,7 +247,58 @@
     </div>
   </section>
 
+<<<<<<< HEAD
   <x-site-footer />
+=======
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo-link">
+          <x-logo />
+        </a>
+        <p>On-demand staffing made simple. Serving San Antonio and expanding across Texas.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>For Employers</h4>
+        <ul>
+          <li><a href="#">Request Workers</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="/#how-it-works">How It Works</a></li>
+          <li><a href="#">Contact Sales</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>For Workers</h4>
+        <ul>
+          <li><a href="/signup/worker">Sign Up</a></li>
+          <li><a href="#">Find Jobs</a></li>
+          <li><a href="#">How Payments Work</a></li>
+          <li><a href="#">Worker FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 {{ config('app.name') }}. All rights reserved.</p>
+      <p>Made with care in San Antonio, TX</p>
+    </div>
+  </footer>
+>>>>>>> main
 
   <!-- Responsive layout for story and founder sections -->
   <style>

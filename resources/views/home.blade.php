@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShiftReady  -  Staffing made as simple as a text message</title>
+  <title>{{ config('app.name') }} - Staffing made as simple as a text message</title>
   <meta name="description" content="Connect employers with ready-to-work talent instantly. Workers get flexible opportunities. Employers get reliable help." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,9 +18,8 @@
   <header class="site-header">
     <div class="site-header-inner">
 
-      <a href="{{ route('home') }}" class="logo-link">
-        <div class="logo-mark"><span>SR</span></div>
-        <span class="logo-text">ShiftReady</span>
+      <a href="/" class="logo-link">
+        <x-logo />
       </a>
 
       <nav class="main-nav">
@@ -95,7 +94,7 @@
               <div class="phone-header">
                 <div class="phone-avatar"><span>SR</span></div>
                 <div class="phone-header-text">
-                  <p>ShiftReady</p>
+                  <p>{{ config('app.name') }}</p>
                   <p>Text Message</p>
                 </div>
               </div>
@@ -353,7 +352,11 @@
       <div class="dark-panel">
         <h3>Ready to start earning?</h3>
         <p>Sign up in 2 minutes. No fees, no catches. We'll text you when we have work that matches your profile.</p>
+<<<<<<< HEAD
         <a href="{{ route('signup.worker') }}" class="btn btn-inverted btn-lg">Join ShiftReady</a>
+=======
+        <a href="/signup/worker" class="btn btn-inverted btn-lg">Join {{ config('app.name') }}</a>
+>>>>>>> main
       </div>
     </div>
   </section>
@@ -617,7 +620,58 @@
     </div>
   </section>
 
+<<<<<<< HEAD
   <x-site-footer />
+=======
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="site-footer">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo-link">
+          <x-logo />
+        </a>
+        <p>On-demand staffing made simple. Serving San Antonio and expanding across Texas.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>For Employers</h4>
+        <ul>
+          <li><a href="#">Request Workers</a></li>
+          <li><a href="#">Pricing</a></li>
+          <li><a href="#">How It Works</a></li>
+          <li><a href="#">Contact Sales</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>For Workers</h4>
+        <ul>
+          <li><a href="/signup/worker">Sign Up</a></li>
+          <li><a href="#">Find Jobs</a></li>
+          <li><a href="#">How Payments Work</a></li>
+          <li><a href="#">Worker FAQ</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="/about">About Us</a></li>
+          <li><a href="#">Contact</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="/terms">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 {{ config('app.name') }}. All rights reserved.</p>
+      <p>Made with care in San Antonio, TX</p>
+    </div>
+  </footer>
+>>>>>>> main
 
   <!-- FAQ responsive layout -->
   <style>

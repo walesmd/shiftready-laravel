@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shifts — ShiftReady</title>
+  <title>Shifts — {{ config('app.name') }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -29,9 +29,8 @@
             </span>
           </button>
 
-          <a href="{{ route('dashboard') }}" class="logo-link">
-            <div class="logo-mark"><span>SR</span></div>
-            <span class="logo-text" style="display:none;">ShiftReady</span>
+          <a href="/dashboard" class="logo-link">
+            <x-logo />
           </a>
         </div>
 

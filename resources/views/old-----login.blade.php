@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Log In — ShiftReady</title>
+  <title>Log In — {{ config('app.name') }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -21,7 +21,7 @@
 
         <x-auth.back-link />
 
-        <x-auth.logo />
+        <x-logo />
 
         <h1 class="auth-heading">Welcome back</h1>
         <p class="auth-subheading">Sign in to your account to continue</p>
@@ -104,11 +104,11 @@
 
       <div>
         <blockquote class="testimonial-blockquote">
-          "ShiftReady changed how I make extra money. I just reply YES to a text, show up, and get paid the same day. It's that simple."
+          "{{ config('app.name') }} changed how I make extra money. I just reply YES to a text, show up, and get paid the same day. It's that simple."
         </blockquote>
         <div class="testimonial-meta" style="margin-top:2rem;">
           <p class="author-name">Marcus J.</p>
-          <p class="author-role">ShiftReady Worker, San Antonio</p>
+          <p class="author-role">{{ config('app.name') }} Worker, San Antonio</p>
         </div>
       </div>
 

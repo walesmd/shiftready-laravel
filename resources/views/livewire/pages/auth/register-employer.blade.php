@@ -158,7 +158,7 @@ new #[Layout('layouts.auth')] class extends Component
                     </div>
                 </div>
                 <p style="font-size:0.875rem;color:var(--primary-foreground-a70);">
-                    "We went from spending 15 hours a week on staffing to zero. ShiftReady handles everything. We just tell them how many drivers we need and they show up ready to work."
+                    "We went from spending 15 hours a week on staffing to zero. {{ config('app.name') }} handles everything. We just tell them how many drivers we need and they show up ready to work."
                 </p>
                 <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--primary-foreground-a20);">
                     <div>
@@ -180,7 +180,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     <x-auth.back-link />
 
-    <x-auth.logo />
+    <x-logo />
 
     @if ($registered)
         <h1 class="auth-heading">We'll be in touch soon</h1>
