@@ -17,6 +17,10 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+Route::view('dashboard/shifts', 'dashboard-shifts')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard.shifts');
+
 Route::view('profile', 'profile')
     ->middleware(['auth'])
     ->name('profile');

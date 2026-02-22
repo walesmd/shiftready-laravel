@@ -123,6 +123,7 @@ p { line-height: 1.625; }
 
 .text-muted     { color: var(--muted-foreground); }
 .text-accent    { color: var(--accent); }
+.text-destructive { color: var(--destructive); }
 .text-foreground { color: var(--foreground); }
 .text-inverted  { color: var(--primary-foreground); }
 
