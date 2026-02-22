@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShiftReady — Staffing made as simple as a text message</title>
+  <title>ShiftReady  -  Staffing made as simple as a text message</title>
   <meta name="description" content="Connect employers with ready-to-work talent instantly. Workers get flexible opportunities. Employers get reliable help." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -283,7 +283,7 @@
         <p class="section-eyebrow">For Workers</p>
         <h2 class="section-heading">Earn extra money on your terms.</h2>
         <p class="section-subheading">
-          Looking to supplement your income? Want flexible work around your schedule? We text you opportunities—you decide if they're right for you.
+          Looking to supplement your income? Want flexible work around your schedule? We text you opportunities - you decide if they're right for you.
         </p>
       </div>
 
@@ -412,7 +412,7 @@
               </div>
               <div class="step-body">
                 <h4>We handle the rest</h4>
-                <p>Payroll, taxes, insurance—all taken care of.</p>
+                <p>Payroll, taxes, insurance - all taken care of.</p>
               </div>
             </div>
           </div>
@@ -486,11 +486,11 @@
       </p>
 
       <div class="city-badges">
-        <div class="city-badge-active">San Antonio — Live Now</div>
-        <div class="city-badge-inactive">Austin — Coming Soon</div>
-        <div class="city-badge-inactive">Houston — Coming Soon</div>
-        <div class="city-badge-inactive">Dallas — Coming Soon</div>
-        <div class="city-badge-inactive">Fort Worth — Coming Soon</div>
+        <div class="city-badge-active">San Antonio  -  Live Now</div>
+        <div class="city-badge-inactive">Austin  -  Coming Soon</div>
+        <div class="city-badge-inactive">Houston  -  Coming Soon</div>
+        <div class="city-badge-inactive">Dallas  -  Coming Soon</div>
+        <div class="city-badge-inactive">Fort Worth  -  Coming Soon</div>
       </div>
 
       <livewire:home.waitlist-form />
@@ -528,7 +528,7 @@
                   <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <div class="accordion-content">
-                  <div class="accordion-body">You pay an hourly rate that covers the worker's wages and our service fee - which covers payroll taxes and workers' comp insurance. No hidden fees, no long-term contracts.</div>
+                  <div class="accordion-body">You pay an hourly rate that covers the worker's wages and our service fee. No hidden fees, no long-term contracts.</div>
                 </div>
               </div>
               <div class="accordion-item">
@@ -537,7 +537,7 @@
                   <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <div class="accordion-content">
-                  <div class="accordion-body">Yes. All workers complete our verification process including identity verification and background screening. We also track performance across all jobs.</div>
+                  <div class="accordion-body">Yes. All workers complete our verification process, which may include identity verification and background screening. We also track performance across all jobs.</div>
                 </div>
               </div>
               <div class="accordion-item">
@@ -571,7 +571,7 @@
                   <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <div class="accordion-content">
-                  <div class="accordion-body">Absolutely not. You only work when you want to. Decline any offer that doesn't fit your schedule—there's no penalty, and it won't affect future offers.</div>
+                  <div class="accordion-body">Absolutely not. You only work when you want to. Decline any offer that doesn't fit your schedule - there's no penalty, and it won't affect future offers.</div>
                 </div>
               </div>
               <div class="accordion-item">
@@ -589,7 +589,7 @@
                   <svg class="accordion-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
                 </button>
                 <div class="accordion-content">
-                  <div class="accordion-body">No minimums. Work one shift a month or five shifts a week—it's completely up to you and what opportunities match your availability.</div>
+                  <div class="accordion-body">No minimums. Work one shift a month or five shifts a week - it's completely up to you and what opportunities match your availability.</div>
                 </div>
               </div>
             </div>
