@@ -9,17 +9,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
-    #[Computed]
-    public function signupDisabled(): bool
-    {
-        return Feature::DisableSignup->isEnabled();
-    }
+    public bool $registered = false;
 
     public int $step = 1;
 
@@ -104,6 +99,12 @@ new #[Layout('layouts.auth')] class extends Component
 
         event(new Registered($user));
 
+        if (Feature::DisableSignup->isEnabled()) {
+            $this->registered = true;
+
+            return;
+        }
+
         Auth::login($user);
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
@@ -170,7 +171,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     <x-auth.logo />
 
-    @if ($this->signupDisabled)
+    @if ($registered)
         <h1 class="auth-heading">We'll be in touch soon</h1>
         <p class="auth-subheading">Registration is currently by invitation only.</p>
         <div class="alert-accent" style="margin-top:2rem;">

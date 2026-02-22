@@ -69,32 +69,16 @@ test('deleting a flag flushes the cache', function () {
     expect($service->isEnabled('disable_signup'))->toBeFalse();
 });
 
-test('disable_signup flag hides worker registration form', function () {
+test('worker registration form always shows on page load regardless of flag', function () {
     FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
-
-    Volt::test('pages.auth.register-worker')
-        ->assertSee("We'll be in touch soon", false)
-        ->assertDontSee('Start earning today');
-});
-
-test('disable_signup flag hides employer registration form', function () {
-    FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
-
-    Volt::test('pages.auth.register-employer')
-        ->assertSee("We'll be in touch soon", false)
-        ->assertDontSee('Get started for your business');
-});
-
-test('worker registration form visible when disable_signup is off', function () {
-    FeatureFlag::factory()->disabled()->forFeature(Feature::DisableSignup)->create();
 
     Volt::test('pages.auth.register-worker')
         ->assertSee('Start earning today')
         ->assertDontSee("We'll be in touch soon", false);
 });
 
-test('employer registration form visible when disable_signup is off', function () {
-    FeatureFlag::factory()->disabled()->forFeature(Feature::DisableSignup)->create();
+test('employer registration form always shows on page load regardless of flag', function () {
+    FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
 
     Volt::test('pages.auth.register-employer')
         ->assertSee('Get started for your business')
