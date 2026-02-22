@@ -18,21 +18,21 @@
   <header class="site-header">
     <div class="site-header-inner">
 
-      <a href="/" class="logo-link">
+      <a href="{{ route('home') }}" class="logo-link">
         <div class="logo-mark"><span>SR</span></div>
         <span class="logo-text">ShiftReady</span>
       </a>
 
       <nav class="main-nav">
-        <a href="/#employers">For Employers</a>
-        <a href="/#workers">For Workers</a>
-        <a href="/#how-it-works">How It Works</a>
-        <a href="/about">About</a>
+        <a href="{{ route('home') }}#employers">For Employers</a>
+        <a href="{{ route('home') }}#workers">For Workers</a>
+        <a href="{{ route('home') }}#how-it-works">How It Works</a>
+        <a href="{{ route('about') }}">About</a>
       </nav>
 
       <div class="header-actions">
-        <a href="/login" class="btn btn-ghost btn-sm">Log in</a>
-        <a href="/signup/worker" class="btn btn-primary btn-sm">Get Started</a>
+        <a href="{{ route('login') }}" class="btn btn-ghost btn-sm">Log in</a>
+        <a href="{{ route('signup.worker') }}" class="btn btn-primary btn-sm">Get Started</a>
       </div>
 
       <button type="button" id="mobile-menu-btn" class="mobile-menu-btn" aria-label="Toggle menu">
@@ -49,14 +49,14 @@
 
     <div id="mobile-menu" class="mobile-menu">
       <nav class="mobile-nav">
-        <a href="/#employers">For Employers</a>
-        <a href="/#workers">For Workers</a>
-        <a href="/#how-it-works">How It Works</a>
-        <a href="/about">About</a>
+        <a href="{{ route('home') }}#employers">For Employers</a>
+        <a href="{{ route('home') }}#workers">For Workers</a>
+        <a href="{{ route('home') }}#how-it-works">How It Works</a>
+        <a href="{{ route('about') }}">About</a>
       </nav>
       <div class="mobile-nav-actions">
-        <a href="/login" class="btn btn-ghost btn-sm btn-w-full">Log in</a>
-        <a href="/signup/worker" class="btn btn-primary btn-sm btn-w-full">Get Started</a>
+        <a href="{{ route('login') }}" class="btn btn-ghost btn-sm btn-w-full">Log in</a>
+        <a href="{{ route('signup.worker') }}" class="btn btn-primary btn-sm btn-w-full">Get Started</a>
       </div>
     </div>
   </header>
@@ -527,11 +527,11 @@
       <h2>Ready to get started?</h2>
       <p>Whether you need workers for tomorrow or you're looking for flexible work on your terms, getting started takes less than 5 minutes.</p>
       <div class="cta-actions">
-        <a href="/signup/employer" class="btn btn-inverted btn-lg">
+        <a href="{{ route('signup.employer') }}" class="btn btn-inverted btn-lg">
           I Need Workers
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
         </a>
-        <a href="/signup/worker" class="btn btn-outline-inverted btn-lg">I Want to Work</a>
+        <a href="{{ route('signup.worker') }}" class="btn btn-outline-inverted btn-lg">I Want to Work</a>
       </div>
     </div>
   </section>

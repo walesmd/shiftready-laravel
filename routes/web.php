@@ -7,7 +7,7 @@ Route::middleware('throttle:30,1')->prefix('api/places')->group(function () {
     Route::get('autocomplete', [PlacesController::class, 'autocomplete']);
 });
 
-Route::view('/', 'home');
+Route::view('/', 'home')->name('home');
 
 Route::view('/about', 'about')->name('about');
 
