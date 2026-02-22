@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\FeatureFlagService;
 use App\Services\GoogleMapsService;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
 
             return new GoogleMapsService(apiKey: $apiKey);
         });
+
+        $this->app->singleton(FeatureFlagService::class);
     }
 
     /**
@@ -28,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Blade::directive('feature', fn ($expr) => "<?php if ({$expr}->isEnabled()): ?>");
+        Blade::directive('endfeature', fn () => '<?php endif; ?>');
     }
 }

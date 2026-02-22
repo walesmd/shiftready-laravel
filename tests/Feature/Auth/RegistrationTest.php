@@ -2,11 +2,18 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Enums\Feature;
 use App\Enums\UserType;
 use App\Jobs\GeocodeAddressJob;
+use App\Models\FeatureFlag;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
 use Livewire\Volt\Volt;
+
+beforeEach(function () {
+    Cache::flush();
+});
 
 test('worker registration screen can be rendered', function () {
     $this->get('/signup/worker')->assertOk()->assertSeeVolt('pages.auth.register-worker');
@@ -84,4 +91,20 @@ test('new employers can register', function () {
         ->and($user->employerProfile->address->place_id)->toBe('employer-place-id');
 
     Queue::assertPushed(GeocodeAddressJob::class);
+});
+
+test('worker registration form replaced when disable_signup is enabled', function () {
+    FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
+
+    Volt::test('pages.auth.register-worker')
+        ->assertSee("We'll be in touch soon", false)
+        ->assertDontSee('Start earning today');
+});
+
+test('employer registration form replaced when disable_signup is enabled', function () {
+    FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
+
+    Volt::test('pages.auth.register-employer')
+        ->assertSee("We'll be in touch soon", false)
+        ->assertDontSee('Get started for your business');
 });

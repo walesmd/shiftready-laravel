@@ -12,6 +12,13 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
         <!-- Scripts -->
+        <script>
+            window.Flags = @json(
+                collect(\App\Enums\Feature::cases())
+                    ->mapWithKeys(fn (\App\Enums\Feature $f) => [$f->value => $f->isEnabled()])
+                    ->all()
+            );
+        </script>
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans antialiased">

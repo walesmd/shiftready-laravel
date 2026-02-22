@@ -1,6 +1,7 @@
 <?php
 
 use App\Data\ProfileOptions;
+use App\Enums\Feature;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -8,11 +9,18 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Layout;
 use Livewire\Volt\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    #[Computed]
+    public function signupDisabled(): bool
+    {
+        return Feature::DisableSignup->isEnabled();
+    }
+
     public int $step = 1;
 
     // Step 1: Personal Info
@@ -162,148 +170,157 @@ new #[Layout('layouts.auth')] class extends Component
 
     <x-auth.logo />
 
-    <h1 class="auth-heading">Start earning today</h1>
-    <p class="auth-subheading">Create your worker account in just a few steps</p>
-
-    <!-- Employer prompt -->
-    <div class="card" style="margin-top:1.5rem;">
-        <div class="card-content" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
-            <p style="font-size:0.875rem;margin:0;">
-                Are you an employer looking to hire?<br />
-                <a href="{{ route('signup.employer') }}" wire:navigate class="auth-footer-link">Sign up as an employer &rarr;</a>
-            </p>
+    @if ($this->signupDisabled)
+        <h1 class="auth-heading">We'll be in touch soon</h1>
+        <p class="auth-subheading">Registration is currently by invitation only.</p>
+        <div class="alert-accent" style="margin-top:2rem;">
+            <h3>You're on the list!</h3>
+            <p>We're expanding and will contact you as soon as we open registration in your area.</p>
         </div>
-    </div>
+    @else
+        <h1 class="auth-heading">Start earning today</h1>
+        <p class="auth-subheading">Create your worker account in just a few steps</p>
 
-    <!-- Progress indicator -->
-    <div class="progress-steps">
-        <div class="progress-step {{ $step >= 1 ? 'active' : '' }}"></div>
-        <div class="progress-step {{ $step >= 2 ? 'active' : '' }}"></div>
-        <div class="progress-step {{ $step >= 3 ? 'active' : '' }}"></div>
-    </div>
-    <p class="step-label">Step {{ $step }} of 3</p>
+        <!-- Employer prompt -->
+        <div class="card" style="margin-top:1.5rem;">
+            <div class="card-content" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+                <p style="font-size:0.875rem;margin:0;">
+                    Are you an employer looking to hire?<br />
+                    <a href="{{ route('signup.employer') }}" wire:navigate class="auth-footer-link">Sign up as an employer &rarr;</a>
+                </p>
+            </div>
+        </div>
 
-    <!-- Step 1: Personal Info -->
-    @if ($step === 1)
-        <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
-            <div class="form-row form-row-2">
+        <!-- Progress indicator -->
+        <div class="progress-steps">
+            <div class="progress-step {{ $step >= 1 ? 'active' : '' }}"></div>
+            <div class="progress-step {{ $step >= 2 ? 'active' : '' }}"></div>
+            <div class="progress-step {{ $step >= 3 ? 'active' : '' }}"></div>
+        </div>
+        <p class="step-label">Step {{ $step }} of 3</p>
+
+        <!-- Step 1: Personal Info -->
+        @if ($step === 1)
+            <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
+                <div class="form-row form-row-2">
+                    <div>
+                        <label class="form-label" for="firstName">First name</label>
+                        <input id="firstName" type="text" class="form-input" placeholder="John" wire:model="firstName" required autocomplete="given-name" />
+                        <x-input-error :messages="$errors->get('firstName')" class="mt-2" />
+                    </div>
+                    <div>
+                        <label class="form-label" for="lastName">Last name</label>
+                        <input id="lastName" type="text" class="form-input" placeholder="Doe" wire:model="lastName" required autocomplete="family-name" />
+                        <x-input-error :messages="$errors->get('lastName')" class="mt-2" />
+                    </div>
+                </div>
+
                 <div>
-                    <label class="form-label" for="firstName">First name</label>
-                    <input id="firstName" type="text" class="form-input" placeholder="John" wire:model="firstName" required autocomplete="given-name" />
-                    <x-input-error :messages="$errors->get('firstName')" class="mt-2" />
+                    <label class="form-label" for="phone">Phone number</label>
+                    <input id="phone" type="tel" class="form-input" placeholder="(210) 555-0123" wire:model="phone" required autocomplete="tel" />
+                    <p class="form-hint">We'll send job offers to this number via text</p>
+                    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
                 </div>
+
                 <div>
-                    <label class="form-label" for="lastName">Last name</label>
-                    <input id="lastName" type="text" class="form-input" placeholder="Doe" wire:model="lastName" required autocomplete="family-name" />
-                    <x-input-error :messages="$errors->get('lastName')" class="mt-2" />
+                    <label class="form-label" for="email">Email</label>
+                    <input id="email" type="email" class="form-input" placeholder="john@example.com" wire:model="email" required autocomplete="email" />
+                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
                 </div>
-            </div>
 
-            <div>
-                <label class="form-label" for="phone">Phone number</label>
-                <input id="phone" type="tel" class="form-input" placeholder="(210) 555-0123" wire:model="phone" required autocomplete="tel" />
-                <p class="form-hint">We'll send job offers to this number via text</p>
-                <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-            </div>
-
-            <div>
-                <label class="form-label" for="email">Email</label>
-                <input id="email" type="email" class="form-input" placeholder="john@example.com" wire:model="email" required autocomplete="email" />
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            </div>
-
-            <div>
-                <label class="form-label" for="worker-password">Password</label>
-                <x-auth.password-input id="worker-password" placeholder="Create a password" wire:model="password" required autocomplete="new-password" />
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg btn-w-full" wire:loading.attr="disabled">
-                <span wire:loading.remove>Continue</span>
-                <span wire:loading>Checking...</span>
-            </button>
-        </form>
-    @endif
-
-    <!-- Step 2: Preferences -->
-    @if ($step === 2)
-        <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
-            <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Your address" />
-            <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
-
-            <div>
-                <label class="form-label">What type of work interests you?</label>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
-                    @foreach (ProfileOptions::INDUSTRIES_AND_WORK_TYPES as $opt)
-                        <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="{{ $opt['value'] }}" /><span>{{ $opt['label'] }}</span></label>
-                    @endforeach
+                <div>
+                    <label class="form-label" for="worker-password">Password</label>
+                    <x-auth.password-input id="worker-password" placeholder="Create a password" wire:model="password" required autocomplete="new-password" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
-            </div>
 
-            <div>
-                <label class="form-label">When are you typically available?</label>
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
-                    @foreach (ProfileOptions::AVAILABILITIES as $opt)
-                        <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="{{ $opt['value'] }}" /><span>{{ $opt['label'] }}</span></label>
-                    @endforeach
-                </div>
-            </div>
-
-            <div style="display:flex;gap:0.75rem;">
-                <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
-                <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
+                <button type="submit" class="btn btn-primary btn-lg btn-w-full" wire:loading.attr="disabled">
                     <span wire:loading.remove>Continue</span>
                     <span wire:loading>Checking...</span>
                 </button>
-            </div>
-        </form>
-    @endif
+            </form>
+        @endif
 
-    <!-- Step 3: Terms -->
-    @if ($step === 3)
-        <form wire:submit="register" class="space-y-5" style="margin-top:2rem;">
-            <div class="alert-accent">
-                <h3>Almost there!</h3>
-                <p>Review and agree to our terms to start receiving job offers.</p>
-            </div>
+        <!-- Step 2: Preferences -->
+        @if ($step === 2)
+            <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
+                <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Your address" />
+                <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
 
-            <div class="space-y-4">
-                <label class="checkbox-label">
-                    <input type="checkbox" class="form-checkbox" wire:model="agreeTerms" />
-                    <span>
-                        I agree to the
-                        <a href="#">Terms of Service</a>
-                        and
-                        <a href="#">Privacy Policy</a>
-                    </span>
-                </label>
-                <x-input-error :messages="$errors->get('agreeTerms')" class="mt-1" />
+                <div>
+                    <label class="form-label">What type of work interests you?</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+                        @foreach (ProfileOptions::INDUSTRIES_AND_WORK_TYPES as $opt)
+                            <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="workTypes" value="{{ $opt['value'] }}" /><span>{{ $opt['label'] }}</span></label>
+                        @endforeach
+                    </div>
+                </div>
 
-                <label class="checkbox-label">
-                    <input type="checkbox" class="form-checkbox" wire:model="agreeSms" />
-                    <span>
-                        I consent to receive job offers and updates via SMS. Message &amp; data rates may apply. Reply STOP to opt out anytime.
-                    </span>
-                </label>
-                <x-input-error :messages="$errors->get('agreeSms')" class="mt-1" />
+                <div>
+                    <label class="form-label">When are you typically available?</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.75rem;margin-top:0.75rem;">
+                        @foreach (ProfileOptions::AVAILABILITIES as $opt)
+                            <label class="option-label"><input type="checkbox" class="form-checkbox" wire:model="availability" value="{{ $opt['value'] }}" /><span>{{ $opt['label'] }}</span></label>
+                        @endforeach
+                    </div>
+                </div>
 
-                <label class="checkbox-label">
-                    <input type="checkbox" class="form-checkbox" wire:model="confirmAge" />
-                    <span>
-                        I confirm I am at least 18 years old and legally authorized to work in the United States.
-                    </span>
-                </label>
-                <x-input-error :messages="$errors->get('confirmAge')" class="mt-1" />
-            </div>
+                <div style="display:flex;gap:0.75rem;">
+                    <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
+                    <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Continue</span>
+                        <span wire:loading>Checking...</span>
+                    </button>
+                </div>
+            </form>
+        @endif
 
-            <div style="display:flex;gap:0.75rem;">
-                <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
-                <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
-                    <span wire:loading.remove>Create account</span>
-                    <span wire:loading>Creating...</span>
-                </button>
-            </div>
-        </form>
+        <!-- Step 3: Terms -->
+        @if ($step === 3)
+            <form wire:submit="register" class="space-y-5" style="margin-top:2rem;">
+                <div class="alert-accent">
+                    <h3>Almost there!</h3>
+                    <p>Review and agree to our terms to start receiving job offers.</p>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="form-checkbox" wire:model="agreeTerms" />
+                        <span>
+                            I agree to the
+                            <a href="#">Terms of Service</a>
+                            and
+                            <a href="#">Privacy Policy</a>
+                        </span>
+                    </label>
+                    <x-input-error :messages="$errors->get('agreeTerms')" class="mt-1" />
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="form-checkbox" wire:model="agreeSms" />
+                        <span>
+                            I consent to receive job offers and updates via SMS. Message &amp; data rates may apply. Reply STOP to opt out anytime.
+                        </span>
+                    </label>
+                    <x-input-error :messages="$errors->get('agreeSms')" class="mt-1" />
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="form-checkbox" wire:model="confirmAge" />
+                        <span>
+                            I confirm I am at least 18 years old and legally authorized to work in the United States.
+                        </span>
+                    </label>
+                    <x-input-error :messages="$errors->get('confirmAge')" class="mt-1" />
+                </div>
+
+                <div style="display:flex;gap:0.75rem;">
+                    <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
+                    <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Create account</span>
+                        <span wire:loading>Creating...</span>
+                    </button>
+                </div>
+            </form>
+        @endif
     @endif
 
     <p class="text-sm text-muted" style="text-align:center;margin-top:2rem;">
