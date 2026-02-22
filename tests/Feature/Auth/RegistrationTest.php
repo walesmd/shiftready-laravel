@@ -2,11 +2,18 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Enums\Feature;
 use App\Enums\UserType;
 use App\Jobs\GeocodeAddressJob;
+use App\Models\FeatureFlag;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Queue;
 use Livewire\Volt\Volt;
+
+beforeEach(function () {
+    Cache::flush();
+});
 
 test('worker registration screen can be rendered', function () {
     $this->get('/signup/worker')->assertOk()->assertSeeVolt('pages.auth.register-worker');
@@ -84,4 +91,59 @@ test('new employers can register', function () {
         ->and($user->employerProfile->address->place_id)->toBe('employer-place-id');
 
     Queue::assertPushed(GeocodeAddressJob::class);
+});
+
+test('worker account is created but not logged in when disable_signup is enabled', function () {
+    Queue::fake();
+    FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
+
+    Volt::test('pages.auth.register-worker')
+        ->set('firstName', 'Test')
+        ->set('lastName', 'Worker')
+        ->set('phone', '2105550123')
+        ->set('email', 'flagged-worker@example.com')
+        ->set('password', 'password')
+        ->call('nextStep')
+        ->set('rawAddress', '123 Main St, San Antonio, TX 78201')
+        ->set('placeId', 'test-place-id')
+        ->call('nextStep')
+        ->set('agreeTerms', true)
+        ->set('agreeSms', true)
+        ->set('confirmAge', true)
+        ->call('register')
+        ->assertSet('registered', true)
+        ->assertSee("We'll be in touch soon", false)
+        ->assertNoRedirect();
+
+    $this->assertGuest();
+    expect(User::where('email', 'flagged-worker@example.com')->exists())->toBeTrue();
+});
+
+test('employer account is created but not logged in when disable_signup is enabled', function () {
+    Queue::fake();
+    FeatureFlag::factory()->enabled()->forFeature(Feature::DisableSignup)->create();
+
+    Volt::test('pages.auth.register-employer')
+        ->set('companyName', 'Flagged Corp')
+        ->set('firstName', 'Test')
+        ->set('lastName', 'Employer')
+        ->set('title', 'Manager')
+        ->set('email', 'flagged-employer@example.com')
+        ->set('phone', '2105550456')
+        ->set('password', 'password')
+        ->call('nextStep')
+        ->set('industry', 'moving')
+        ->set('rawAddress', '456 Oak Ave, San Antonio, TX 78205')
+        ->set('placeId', 'employer-place-id')
+        ->set('workerCount', '1-5')
+        ->call('nextStep')
+        ->set('agreeTerms', true)
+        ->set('agreeAuthorization', true)
+        ->call('register')
+        ->assertSet('registered', true)
+        ->assertSee("We'll be in touch soon", false)
+        ->assertNoRedirect();
+
+    $this->assertGuest();
+    expect(User::where('email', 'flagged-employer@example.com')->exists())->toBeTrue();
 });

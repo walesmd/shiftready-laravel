@@ -1,6 +1,7 @@
 <?php
 
 use App\Data\ProfileOptions;
+use App\Enums\Feature;
 use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
@@ -13,6 +14,8 @@ use Livewire\Volt\Component;
 
 new #[Layout('layouts.auth')] class extends Component
 {
+    public bool $registered = false;
+
     public int $step = 1;
 
     // Step 1: Contact Info
@@ -100,6 +103,12 @@ new #[Layout('layouts.auth')] class extends Component
             return $user;
         });
 
+        if (Feature::DisableSignup->isEnabled()) {
+            $this->registered = true;
+
+            return;
+        }
+
         Auth::login($user);
 
         $this->redirect(route('dashboard', absolute: false), navigate: true);
@@ -173,188 +182,197 @@ new #[Layout('layouts.auth')] class extends Component
 
     <x-auth.logo />
 
-    <h1 class="auth-heading">Get started for your business</h1>
-    <p class="auth-subheading">Create your employer account to start filling shifts</p>
-
-    <!-- Worker prompt -->
-    <div class="card" style="margin-top:1.5rem;">
-        <div class="card-content" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
-            <p style="font-size:0.875rem;margin:0;">
-                Are you a worker looking to earn?<br />
-                <a href="{{ route('signup.worker') }}" wire:navigate class="auth-footer-link">Sign up as a worker &rarr;</a>
-            </p>
+    @if ($registered)
+        <h1 class="auth-heading">We'll be in touch soon</h1>
+        <p class="auth-subheading">Registration is currently by invitation only.</p>
+        <div class="alert-accent" style="margin-top:2rem;">
+            <h3>You're on the list!</h3>
+            <p>We're expanding and will contact you as soon as we open registration in your area.</p>
         </div>
-    </div>
+    @else
+        <h1 class="auth-heading">Get started for your business</h1>
+        <p class="auth-subheading">Create your employer account to start filling shifts</p>
 
-    <!-- Progress indicator -->
-    <div class="progress-steps">
-        <div class="progress-step {{ $step >= 1 ? 'active' : '' }}"></div>
-        <div class="progress-step {{ $step >= 2 ? 'active' : '' }}"></div>
-        <div class="progress-step {{ $step >= 3 ? 'active' : '' }}"></div>
-    </div>
-    <p class="step-label">Step {{ $step }} of 3</p>
-
-    <!-- Step 1: Contact Info -->
-    @if ($step === 1)
-        <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
-            <div>
-                <label class="form-label" for="companyName">Company name</label>
-                <input id="companyName" type="text" class="form-input" placeholder="Acme Moving Co." wire:model="companyName" required autocomplete="organization" />
-                <x-input-error :messages="$errors->get('companyName')" class="mt-2" />
+        <!-- Worker prompt -->
+        <div class="card" style="margin-top:1.5rem;">
+            <div class="card-content" style="display:flex;align-items:center;justify-content:space-between;gap:1rem;">
+                <p style="font-size:0.875rem;margin:0;">
+                    Are you a worker looking to earn?<br />
+                    <a href="{{ route('signup.worker') }}" wire:navigate class="auth-footer-link">Sign up as a worker &rarr;</a>
+                </p>
             </div>
+        </div>
 
-            <div class="form-row form-row-2">
+        <!-- Progress indicator -->
+        <div class="progress-steps">
+            <div class="progress-step {{ $step >= 1 ? 'active' : '' }}"></div>
+            <div class="progress-step {{ $step >= 2 ? 'active' : '' }}"></div>
+            <div class="progress-step {{ $step >= 3 ? 'active' : '' }}"></div>
+        </div>
+        <p class="step-label">Step {{ $step }} of 3</p>
+
+        <!-- Step 1: Contact Info -->
+        @if ($step === 1)
+            <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
                 <div>
-                    <label class="form-label" for="empFirstName">Your first name</label>
-                    <input id="empFirstName" type="text" class="form-input" placeholder="Jane" wire:model="firstName" required autocomplete="given-name" />
-                    <x-input-error :messages="$errors->get('firstName')" class="mt-2" />
+                    <label class="form-label" for="companyName">Company name</label>
+                    <input id="companyName" type="text" class="form-input" placeholder="Acme Moving Co." wire:model="companyName" required autocomplete="organization" />
+                    <x-input-error :messages="$errors->get('companyName')" class="mt-2" />
                 </div>
+
+                <div class="form-row form-row-2">
+                    <div>
+                        <label class="form-label" for="empFirstName">Your first name</label>
+                        <input id="empFirstName" type="text" class="form-input" placeholder="Jane" wire:model="firstName" required autocomplete="given-name" />
+                        <x-input-error :messages="$errors->get('firstName')" class="mt-2" />
+                    </div>
+                    <div>
+                        <label class="form-label" for="empLastName">Your last name</label>
+                        <input id="empLastName" type="text" class="form-input" placeholder="Smith" wire:model="lastName" required autocomplete="family-name" />
+                        <x-input-error :messages="$errors->get('lastName')" class="mt-2" />
+                    </div>
+                </div>
+
                 <div>
-                    <label class="form-label" for="empLastName">Your last name</label>
-                    <input id="empLastName" type="text" class="form-input" placeholder="Smith" wire:model="lastName" required autocomplete="family-name" />
-                    <x-input-error :messages="$errors->get('lastName')" class="mt-2" />
+                    <label class="form-label" for="empTitle">Your title</label>
+                    <input id="empTitle" type="text" class="form-input" placeholder="Operations Manager" wire:model="title" required autocomplete="organization-title" />
+                    <x-input-error :messages="$errors->get('title')" class="mt-2" />
                 </div>
-            </div>
 
-            <div>
-                <label class="form-label" for="empTitle">Your title</label>
-                <input id="empTitle" type="text" class="form-input" placeholder="Operations Manager" wire:model="title" required autocomplete="organization-title" />
-                <x-input-error :messages="$errors->get('title')" class="mt-2" />
-            </div>
+                <div>
+                    <label class="form-label" for="empEmail">Work email</label>
+                    <input id="empEmail" type="email" class="form-input" placeholder="jane@acmemoving.com" wire:model="email" required autocomplete="email" />
+                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                </div>
 
-            <div>
-                <label class="form-label" for="empEmail">Work email</label>
-                <input id="empEmail" type="email" class="form-input" placeholder="jane@acmemoving.com" wire:model="email" required autocomplete="email" />
-                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-            </div>
+                <div>
+                    <label class="form-label" for="empPhone">Phone number</label>
+                    <input id="empPhone" type="tel" class="form-input" placeholder="(210) 555-0123" wire:model="phone" required autocomplete="tel" />
+                    <x-input-error :messages="$errors->get('phone')" class="mt-2" />
+                </div>
 
-            <div>
-                <label class="form-label" for="empPhone">Phone number</label>
-                <input id="empPhone" type="tel" class="form-input" placeholder="(210) 555-0123" wire:model="phone" required autocomplete="tel" />
-                <x-input-error :messages="$errors->get('phone')" class="mt-2" />
-            </div>
+                <div>
+                    <label class="form-label" for="emp-password">Password</label>
+                    <x-auth.password-input id="emp-password" placeholder="Create a password" wire:model="password" required autocomplete="new-password" />
+                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                </div>
 
-            <div>
-                <label class="form-label" for="emp-password">Password</label>
-                <x-auth.password-input id="emp-password" placeholder="Create a password" wire:model="password" required autocomplete="new-password" />
-                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg btn-w-full" wire:loading.attr="disabled">
-                <span wire:loading.remove>Continue</span>
-                <span wire:loading>Checking...</span>
-            </button>
-        </form>
-    @endif
-
-    <!-- Step 2: Business Details -->
-    @if ($step === 2)
-        <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
-            <div>
-                <label class="form-label" for="industry">Industry</label>
-                <select id="industry" class="form-select" wire:model="industry" required>
-                    <option value="" disabled>Select your industry</option>
-                    @foreach (ProfileOptions::INDUSTRIES_AND_WORK_TYPES as $opt)
-                        <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
-                    @endforeach
-                </select>
-                <x-input-error :messages="$errors->get('industry')" class="mt-2" />
-            </div>
-
-            <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Business address" />
-            <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
-
-            <div>
-                <label class="form-label" for="workerCount">How many workers do you typically need per week?</label>
-                <select id="workerCount" class="form-select" wire:model="workerCount" required>
-                    <option value="" disabled>Select range</option>
-                    @foreach (ProfileOptions::WORKER_COUNTS as $opt)
-                        <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
-                    @endforeach
-                </select>
-                <x-input-error :messages="$errors->get('workerCount')" class="mt-2" />
-            </div>
-
-            <div>
-                <label class="form-label" for="roles">What types of roles do you need filled?</label>
-                <textarea id="roles" class="form-textarea" placeholder="e.g., Moving helpers, car drivers, box packers..." wire:model="roles"></textarea>
-            </div>
-
-            <div style="display:flex;gap:0.75rem;">
-                <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
-                <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
+                <button type="submit" class="btn btn-primary btn-lg btn-w-full" wire:loading.attr="disabled">
                     <span wire:loading.remove>Continue</span>
                     <span wire:loading>Checking...</span>
                 </button>
-            </div>
-        </form>
-    @endif
+            </form>
+        @endif
 
-    <!-- Step 3: Review & Terms -->
-    @if ($step === 3)
-        <form wire:submit="register" class="space-y-5" style="margin-top:2rem;">
-            <div class="alert-accent">
-                <h3>You're almost ready!</h3>
-                <p>After creating your account, a member of our team will reach out within 24 hours to complete your onboarding.</p>
-            </div>
-
-            <div class="card">
-                <div class="card-content">
-                    <h4 style="font-weight:500;margin-bottom:0.75rem;">What's included:</h4>
-                    <ul class="included-list">
-                        <li class="included-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                            Dedicated account manager
-                        </li>
-                        <li class="included-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                            Custom shift scheduling dashboard
-                        </li>
-                        <li class="included-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                            Real-time worker tracking
-                        </li>
-                        <li class="included-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                            Consolidated weekly invoicing
-                        </li>
-                        <li class="included-item">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-                            24/7 support hotline
-                        </li>
-                    </ul>
+        <!-- Step 2: Business Details -->
+        @if ($step === 2)
+            <form wire:submit="nextStep" class="space-y-5" style="margin-top:2rem;">
+                <div>
+                    <label class="form-label" for="industry">Industry</label>
+                    <select id="industry" class="form-select" wire:model="industry" required>
+                        <option value="" disabled>Select your industry</option>
+                        @foreach (ProfileOptions::INDUSTRIES_AND_WORK_TYPES as $opt)
+                            <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
+                        @endforeach
+                    </select>
+                    <x-input-error :messages="$errors->get('industry')" class="mt-2" />
                 </div>
-            </div>
 
-            <div class="space-y-4">
-                <label class="checkbox-label">
-                    <input type="checkbox" class="form-checkbox" wire:model="agreeTerms" />
-                    <span>
-                        I agree to the
-                        <a href="#">Terms of Service</a>,
-                        <a href="#">Privacy Policy</a>, and
-                        <a href="#">Master Service Agreement</a>
-                    </span>
-                </label>
-                <x-input-error :messages="$errors->get('agreeTerms')" class="mt-1" />
+                <x-address-input wire-raw-address="rawAddress" wire-place-id="placeId" label="Business address" />
+                <x-input-error :messages="$errors->get('rawAddress')" class="mt-2" />
 
-                <label class="checkbox-label">
-                    <input type="checkbox" class="form-checkbox" wire:model="agreeAuthorization" />
-                    <span>
-                        I confirm I am authorized to enter into agreements on behalf of my company.
-                    </span>
-                </label>
-                <x-input-error :messages="$errors->get('agreeAuthorization')" class="mt-1" />
-            </div>
+                <div>
+                    <label class="form-label" for="workerCount">How many workers do you typically need per week?</label>
+                    <select id="workerCount" class="form-select" wire:model="workerCount" required>
+                        <option value="" disabled>Select range</option>
+                        @foreach (ProfileOptions::WORKER_COUNTS as $opt)
+                            <option value="{{ $opt['value'] }}">{{ $opt['label'] }}</option>
+                        @endforeach
+                    </select>
+                    <x-input-error :messages="$errors->get('workerCount')" class="mt-2" />
+                </div>
 
-            <div style="display:flex;gap:0.75rem;">
-                <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
-                <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
-                    <span wire:loading.remove>Create account</span>
-                    <span wire:loading>Creating...</span>
-                </button>
-            </div>
-        </form>
+                <div>
+                    <label class="form-label" for="roles">What types of roles do you need filled?</label>
+                    <textarea id="roles" class="form-textarea" placeholder="e.g., Moving helpers, car drivers, box packers..." wire:model="roles"></textarea>
+                </div>
+
+                <div style="display:flex;gap:0.75rem;">
+                    <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
+                    <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Continue</span>
+                        <span wire:loading>Checking...</span>
+                    </button>
+                </div>
+            </form>
+        @endif
+
+        <!-- Step 3: Review & Terms -->
+        @if ($step === 3)
+            <form wire:submit="register" class="space-y-5" style="margin-top:2rem;">
+                <div class="alert-accent">
+                    <h3>You're almost ready!</h3>
+                    <p>After creating your account, a member of our team will reach out within 24 hours to complete your onboarding.</p>
+                </div>
+
+                <div class="card">
+                    <div class="card-content">
+                        <h4 style="font-weight:500;margin-bottom:0.75rem;">What's included:</h4>
+                        <ul class="included-list">
+                            <li class="included-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                Dedicated account manager
+                            </li>
+                            <li class="included-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                Custom shift scheduling dashboard
+                            </li>
+                            <li class="included-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                Real-time worker tracking
+                            </li>
+                            <li class="included-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                Consolidated weekly invoicing
+                            </li>
+                            <li class="included-item">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+                                24/7 support hotline
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="form-checkbox" wire:model="agreeTerms" />
+                        <span>
+                            I agree to the
+                            <a href="#">Terms of Service</a>,
+                            <a href="#">Privacy Policy</a>, and
+                            <a href="#">Master Service Agreement</a>
+                        </span>
+                    </label>
+                    <x-input-error :messages="$errors->get('agreeTerms')" class="mt-1" />
+
+                    <label class="checkbox-label">
+                        <input type="checkbox" class="form-checkbox" wire:model="agreeAuthorization" />
+                        <span>
+                            I confirm I am authorized to enter into agreements on behalf of my company.
+                        </span>
+                    </label>
+                    <x-input-error :messages="$errors->get('agreeAuthorization')" class="mt-1" />
+                </div>
+
+                <div style="display:flex;gap:0.75rem;">
+                    <button type="button" class="btn btn-outline btn-lg" style="flex:1;" wire:click="prevStep">Back</button>
+                    <button type="submit" class="btn btn-primary btn-lg" style="flex:1;" wire:loading.attr="disabled">
+                        <span wire:loading.remove>Create account</span>
+                        <span wire:loading>Creating...</span>
+                    </button>
+                </div>
+            </form>
+        @endif
     @endif
 
     <p class="text-sm text-muted" style="text-align:center;margin-top:2rem;">
