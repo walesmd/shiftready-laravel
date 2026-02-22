@@ -12,7 +12,7 @@ class ListFeaturesCommand extends Command
 
     protected $description = 'List all feature flags and their current state';
 
-    public function handle(FeatureFlagService $service): int
+    public function handle(): int
     {
         $rows = array_map(
             fn (Feature $feature) => [
