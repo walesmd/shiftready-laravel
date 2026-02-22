@@ -41,35 +41,36 @@ new class extends Component
 <div class="card">
     <div class="card-header">
         <h3 class="card-title">Update Password</h3>
-        <p style="font-size:0.875rem;color:var(--muted-foreground);margin-top:0.25rem;">Ensure your account is using a long, random password to stay secure.</p>
+        <p class="text-sm text-muted-foreground mt-1">Ensure your account is using a long, random password to stay secure.</p>
     </div>
     <div class="card-content">
-        <form wire:submit="updatePassword" style="display:flex;flex-direction:column;gap:1.25rem;">
+        <form wire:submit="updatePassword" class="flex flex-col gap-5">
             <div>
                 <label class="form-label" for="update_password_current_password">Current Password</label>
                 <input wire:model="current_password" class="form-input" id="update_password_current_password" name="current_password" type="password" autocomplete="current-password" />
-                @error('current_password') <p class="form-hint" style="color:var(--destructive);">{{ $message }}</p> @enderror
+                @error('current_password') <p class="form-hint text-destructive">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="form-label" for="update_password_password">New Password</label>
                 <input wire:model="password" class="form-input" id="update_password_password" name="password" type="password" autocomplete="new-password" />
-                @error('password') <p class="form-hint" style="color:var(--destructive);">{{ $message }}</p> @enderror
+                @error('password') <p class="form-hint text-destructive">{{ $message }}</p> @enderror
             </div>
 
             <div>
                 <label class="form-label" for="update_password_password_confirmation">Confirm Password</label>
                 <input wire:model="password_confirmation" class="form-input" id="update_password_password_confirmation" name="password_confirmation" type="password" autocomplete="new-password" />
-                @error('password_confirmation') <p class="form-hint" style="color:var(--destructive);">{{ $message }}</p> @enderror
+                @error('password_confirmation') <p class="form-hint text-destructive">{{ $message }}</p> @enderror
             </div>
 
-            <div style="display:flex;align-items:center;gap:1rem;">
+            <div class="flex items-center gap-4">
                 <button type="submit" class="btn btn-primary">Save</button>
 
                 <span x-data="{ show: false }"
                       x-on:password-updated.window="show = true; setTimeout(() => show = false, 2500)"
                       x-show="show"
-                      style="font-size:0.875rem;color:var(--accent);display:none;">Saved.</span>
+                      x-cloak
+                      class="text-sm text-accent">Saved.</span>
             </div>
         </form>
     </div>

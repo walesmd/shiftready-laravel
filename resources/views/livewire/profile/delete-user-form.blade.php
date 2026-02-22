@@ -37,11 +37,11 @@ new class extends Component
     </div>
 </div>
 
-<div id="delete-account-modal" class="modal-overlay">
-    <div class="modal-content">
+<div id="delete-account-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="delete-account-modal-title" aria-describedby="delete-account-modal-description">
+    <div class="modal-content" tabindex="-1">
         <div class="modal-header">
-            <h2 class="modal-title">Are you sure you want to delete your account?</h2>
-            <p class="modal-description">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.</p>
+            <h2 id="delete-account-modal-title" class="modal-title">Are you sure you want to delete your account?</h2>
+            <p id="delete-account-modal-description" class="modal-description">Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm.</p>
         </div>
 
         <form wire:submit="deleteUser">
@@ -52,7 +52,7 @@ new class extends Component
             </div>
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline" data-modal-close="delete-account-modal">Cancel</button>
+                <button type="button" class="btn btn-outline" data-modal-close="delete-account-modal" aria-label="Close dialog">Cancel</button>
                 <button type="submit" class="btn btn-primary" style="background-color:var(--destructive);border-color:var(--destructive);">Delete Account</button>
             </div>
         </form>
