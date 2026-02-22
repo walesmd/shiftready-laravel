@@ -1622,13 +1622,12 @@ p { line-height: 1.625; }
 }
 .auth-back-link:hover { color: var(--foreground); }
 
-.auth-logo {
+.app-logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.5rem;
 }
-.auth-logo-mark {
+.app-logo-mark {
   width: 2.25rem;
   height: 2.25rem;
   background-color: var(--foreground);
@@ -1638,11 +1637,17 @@ p { line-height: 1.625; }
   justify-content: center;
   flex-shrink: 0;
 }
-.auth-logo-mark svg { color: var(--primary-foreground); }
-.auth-logo span {
+.app-logo-mark svg { color: var(--primary-foreground); }
+.app-logo span {
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.025em;
+}
+
+/* Auth context: add bottom margin when logo appears inside auth form */
+.auth-form-inner .app-logo,
+.auth-form-inner-lg .app-logo {
+  margin-bottom: 0.5rem;
 }
 
 .auth-heading {

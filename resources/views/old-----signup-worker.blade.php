@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Worker Sign Up — ShiftReady</title>
+  <title>Worker Sign Up — {{ config('app.name') }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -28,7 +28,7 @@
           <div class="auth-logo-mark">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
-          <span>ShiftReady</span>
+          <span>{{ config('app.name') }}</span>
         </div>
 
         <h1 class="auth-heading">Start earning today</h1>
@@ -185,7 +185,7 @@
     <div class="auth-visual-side" style="justify-content:center;">
       <div class="auth-visual-content">
         <h2>Why workers love us</h2>
-        <p>Join hundreds of workers in San Antonio already earning with ShiftReady</p>
+        <p>Join hundreds of workers in San Antonio already earning with {{ config('app.name') }}</p>
 
         <div class="auth-benefit-list">
           <div class="auth-benefit-item">
