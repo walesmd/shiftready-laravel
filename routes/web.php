@@ -9,6 +9,8 @@ Route::middleware('throttle:30,1')->prefix('api/places')->group(function () {
 
 Route::view('/', 'home');
 
+Route::view('/about', 'about')->name('about');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
