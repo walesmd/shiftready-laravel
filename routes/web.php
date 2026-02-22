@@ -11,6 +11,8 @@ Route::view('/', 'home');
 
 Route::view('/about', 'about')->name('about');
 
+Route::view('/terms', 'terms')->name('terms');
+
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
