@@ -27,6 +27,7 @@
         <a href="#employers">For Employers</a>
         <a href="#workers">For Workers</a>
         <a href="#how-it-works">How It Works</a>
+        <a href="/about">About</a>
       </nav>
 
       <div class="header-actions">
@@ -51,6 +52,7 @@
         <a href="#employers">For Employers</a>
         <a href="#workers">For Workers</a>
         <a href="#how-it-works">How It Works</a>
+        <a href="/about">About</a>
       </nav>
       <div class="mobile-nav-actions">
         <a href="/login" class="btn btn-ghost btn-sm btn-w-full">Log in</a>
@@ -651,7 +653,7 @@
       <div class="footer-col">
         <h4>Company</h4>
         <ul>
-          <li><a href="#">About Us</a></li>
+          <li><a href="/about">About Us</a></li>
           <li><a href="#">Contact</a></li>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
