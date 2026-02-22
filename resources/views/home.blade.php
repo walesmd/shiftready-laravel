@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{{ config('app.name') }}  -  Staffing made as simple as a text message</title>
+  <title>{{ config('app.name') }} - Staffing made as simple as a text message</title>
   <meta name="description" content="Connect employers with ready-to-work talent instantly. Workers get flexible opportunities. Employers get reliable help." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
