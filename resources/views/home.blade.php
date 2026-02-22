@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShiftReady  -  Staffing made as simple as a text message</title>
+  <title>{{ config('app.name') }} - Staffing made as simple as a text message</title>
   <meta name="description" content="Connect employers with ready-to-work talent instantly. Workers get flexible opportunities. Employers get reliable help." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -19,8 +19,7 @@
     <div class="site-header-inner">
 
       <a href="/" class="logo-link">
-        <div class="logo-mark"><span>SR</span></div>
-        <span class="logo-text">ShiftReady</span>
+        <x-logo />
       </a>
 
       <nav class="main-nav">
@@ -95,7 +94,7 @@
               <div class="phone-header">
                 <div class="phone-avatar"><span>SR</span></div>
                 <div class="phone-header-text">
-                  <p>ShiftReady</p>
+                  <p>{{ config('app.name') }}</p>
                   <p>Text Message</p>
                 </div>
               </div>
@@ -353,7 +352,7 @@
       <div class="dark-panel">
         <h3>Ready to start earning?</h3>
         <p>Sign up in 2 minutes. No fees, no catches. We'll text you when we have work that matches your profile.</p>
-        <a href="/signup/worker" class="btn btn-inverted btn-lg">Join ShiftReady</a>
+        <a href="/signup/worker" class="btn btn-inverted btn-lg">Join {{ config('app.name') }}</a>
       </div>
     </div>
   </section>
@@ -624,8 +623,7 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="/" class="logo-link">
-          <div class="logo-mark"><span>SR</span></div>
-          <span class="logo-text">ShiftReady</span>
+          <x-logo />
         </a>
         <p>On-demand staffing made simple. Serving San Antonio and expanding across Texas.</p>
       </div>
@@ -662,7 +660,7 @@
     </div>
 
     <div class="footer-bottom">
-      <p>&copy; 2026 ShiftReady. All rights reserved.</p>
+      <p>&copy; 2026 {{ config('app.name') }}. All rights reserved.</p>
       <p>Made with care in San Antonio, TX</p>
     </div>
   </footer>

@@ -115,7 +115,7 @@ new #[Layout('layouts.auth')] class extends Component
     <x-auth.visual-side>
         <div class="auth-visual-content">
             <h2>Why workers love us</h2>
-            <p>Join hundreds of workers in San Antonio already earning with ShiftReady</p>
+            <p>Join hundreds of workers in San Antonio already earning with {{ config('app.name') }}</p>
 
             <div class="auth-benefit-list">
                 <x-auth.benefit-item title="Text-based jobs" description="Get job offers via text. Reply YES or NO.">
@@ -169,7 +169,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     <x-auth.back-link />
 
-    <x-auth.logo />
+    <x-logo />
 
     @if ($registered)
         <h1 class="auth-heading">We'll be in touch soon</h1>

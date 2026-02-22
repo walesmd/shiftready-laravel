@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Employer Sign Up — ShiftReady</title>
+  <title>Employer Sign Up — {{ config('app.name') }}</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -28,7 +28,7 @@
           <div class="auth-logo-mark">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
           </div>
-          <span>ShiftReady</span>
+          <span>{{ config('app.name') }}</span>
         </div>
 
         <h1 class="auth-heading">Get started for your business</h1>
@@ -288,7 +288,7 @@
             </div>
           </div>
           <p style="font-size:0.875rem;color:var(--primary-foreground-a70);">
-            "We went from spending 15 hours a week on staffing to zero. ShiftReady handles everything. We just tell them how many drivers we need and they show up ready to work."
+            "We went from spending 15 hours a week on staffing to zero. {{ config('app.name') }} handles everything. We just tell them how many drivers we need and they show up ready to work."
           </p>
           <div style="display:flex;align-items:center;gap:1rem;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--primary-foreground-a20);">
             <div>

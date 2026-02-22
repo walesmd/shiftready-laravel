@@ -30,11 +30,11 @@ new #[Layout('layouts.auth')] class extends Component
 
         <div>
             <blockquote class="testimonial-blockquote">
-                "ShiftReady changed how I make extra money. I just reply YES to a text, show up, and get paid the same day. It's that simple."
+                "{{ config('app.name') }} changed how I make extra money. I just reply YES to a text, show up, and get paid the same day. It's that simple."
             </blockquote>
             <div class="testimonial-meta" style="margin-top:2rem;">
                 <p class="author-name">Marcus J.</p>
-                <p class="author-role">ShiftReady Worker, San Antonio</p>
+                <p class="author-role">{{ config('app.name') }} Worker, San Antonio</p>
             </div>
         </div>
 
@@ -64,7 +64,7 @@ new #[Layout('layouts.auth')] class extends Component
 
     <x-auth.back-link />
 
-    <x-auth.logo />
+    <x-logo />
 
     <h1 class="auth-heading">Welcome back</h1>
     <p class="auth-subheading">Sign in to your account to continue</p>
